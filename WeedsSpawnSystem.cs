@@ -16,24 +16,60 @@ public class WeedsSpawnSystem : MonoBehaviour
     public GameObject goldenWeed;
 
     [Header ("Green Weed Settings")]
+    [Tooltip("Shows how many Green Weeds currently on the field (Not to modify!)")]
     public int greenCounter;
+    [Tooltip("Max amount able to spawn together")]
     public int maxGreenWeedCounter;
-    public float greenGrowCD, greenGrowSpeedModifier, fastestGreenGrowSpeed;
+    [Tooltip("CoolDown before next spawn")]
+    public float greenGrowCD;
+    [Tooltip("Amount of time removed from grow CoolDown duration at each spawn")]
+    public float greenGrowSpeedModifier;
+    [Tooltip("Cap set for fastest spawn CoolDown")]
+    public float fastestGreenGrowSpeed;
+    [Tooltip("Preset quantity that spawn at the start of each game")]
+    public int greenStartQuantity;
 
     [Header ("Blade Weed Settings")]
+    [Tooltip("Shows how many Blade Weeds currently on the field (Not to modify!)")]
     public int bladeCounter;
+    [Tooltip("Max amount able to spawn together")]
     public int maxBladeWeedConter;
-    public float bladeGrowCD, bladeGrowSpeedModifier, fastestBladeGrowSpeed;
+    [Tooltip("CoolDown before next spawn")]
+    public float bladeGrowCD;
+    [Tooltip("Amount of time removed from grow CoolDown duration at each spawn")]
+    public float bladeGrowSpeedModifier;
+    [Tooltip("Cap set for fastest spawn CoolDown")]
+    public float fastestBladeGrowSpeed;
+    [Tooltip("Preset quantity that spawn at the start of each game")]
+    public int bladeStartQuantity;
 
     [Header ("Golden Weed Settings")]
+    [Tooltip("Shows how many Golden Weeds currently on the field (Not to modify!)")]
     public int goldCounter;
+    [Tooltip("Max amount able to spawn together")]
     public int maxGoldenWeedCounter;
-    public float goldGrowCD, goldGrowSpeedModifier, fastestGoldGrowSpeed;
+    [Tooltip("CoolDown before next spawn")]
+    public float goldGrowCD;
+    [Tooltip("Amount of time removed from grow CoolDown duration at each spawn")]
+    public float goldGrowSpeedModifier;
+    [Tooltip("Cap set for fastest spawn CoolDown")]
+    public float fastestGoldGrowSpeed;
+    [Tooltip("Preset quantity that spawn at the start of each game")]
+    public int goldStartQuantity;
 
     [Header ("Bush Settings")]
+    [Tooltip("Shows how many Bushes currently on the field (Not to modify!)")]
     public int bushCounter = 0;
+    [Tooltip("Max amount able to spawn together")]
     public int maxBushCounter;
-    public float bushGrowCD, bushGrowSpeedModifier, fastestBushGrowSpeed;
+    [Tooltip("CoolDown before next spawn")]
+    public float bushGrowCD;
+    [Tooltip("Amount of time removed from grow CoolDown duration at each spawn")]
+    public float bushGrowSpeedModifier;
+    [Tooltip("Cap set for fastest spawn CoolDown")]
+    public float fastestBushGrowSpeed;
+    [Tooltip("Preset quantity that spawn at the start of each game")]
+    public int bushStartQuantity;
 
     [Header ("Evil Weed Settings")]
     [Tooltip("Shows how many Evil Weeds currently on the field (Not to modify!)")]
@@ -45,18 +81,17 @@ public class WeedsSpawnSystem : MonoBehaviour
     [Tooltip("Amount of time removed from grow CoolDown duration at each spawn")]
     public float evilWeedGrowSpeedModifier;
     [Tooltip("Cap set for fastest spawn CoolDown")]
-    public float fastestEvilWeedGrowSpeed; 
+    public float fastestEvilWeedGrowSpeed;
+    [Tooltip("Preset quantity that spawn at the start of each game")]
+    public int evilStartQuantity;
     
     [Header ("Tulipa Settings")]
     [Tooltip("Shows how many Tuilpas currently on the field (Not to modify!)")]
     public int tulipaCounter = 0;
+    [Tooltip("Max amount able to spawn together")]
     public int maxTulipaCounter;
+    [Tooltip("CoolDown before next spawn")]
     public float tulipaGrowCD;
-
-    //Ints that keep track of how many plants of each kind are on the field at any given time
-    //(public just to check in development)
-
-    //Ints that keep a cap on how many of each lnt can be spawned at the same time
 
     //Bools that gives the ok whenever a plant should spawn
     private bool 
@@ -64,13 +99,11 @@ public class WeedsSpawnSystem : MonoBehaviour
         tulipaCanGrow, evilWeedCanGrow, bushCanGrow;
 
     //Floats used to manage the spawn rate of each plant
-    private float 
+    private double 
         evilGrowCDTimer, tulipaGrowCDTimer, bushGrowCDTimer,
         greenGrowCDTimer, goldGrowCDTimer, bladeGrowCDTimer;
 
     //Ints used to determine with what quantity of each plant the game start
-    public int
-        evilWeedStartQuantity, bushStartQuantity, greenStartQuantity, bladeStartQuantity, goldStartQuantity;
 
     public GameOverSystem gameOver;
 
@@ -89,7 +122,7 @@ public class WeedsSpawnSystem : MonoBehaviour
 
     private void Start()
     {
-        for (int i = 0; i < evilWeedStartQuantity; i++)
+        for (int i = 0; i < evilStartQuantity; i++)
         {
             //SpawnPlant(weed);
             SpawnEvilWeed();
@@ -99,6 +132,21 @@ public class WeedsSpawnSystem : MonoBehaviour
         {
             //SpawnPlant(bush);
             SpawnBush();
+        }
+
+        for (int i = 0; i < greenStartQuantity; i++)
+        {
+            SpawnGreenWeed();
+        }
+
+        for (int i = 0; i < bladeStartQuantity; i++)
+        {
+            SpawnBladeWeed();
+        }
+
+        for (int i = 0; i < goldStartQuantity; i++)
+        {
+            SpawnGoldWeed();
         }
     }
 
@@ -135,6 +183,26 @@ public class WeedsSpawnSystem : MonoBehaviour
                 greenCanGrow = true;
                 greenGrowCDTimer = greenGrowCD;
             }
+
+            if(!bladeCanGrow && bladeGrowCDTimer > 0)
+            {
+                bladeGrowCDTimer -= Time.fixedDeltaTime;
+            }
+            else
+            {
+                bladeCanGrow = true;
+                bladeGrowCDTimer = bladeGrowCD;
+            }
+
+            if(!goldCanGrow && goldGrowCDTimer > 0)
+            {
+                goldGrowCDTimer -= Time.fixedDeltaTime;
+            }
+            else
+            {
+                goldCanGrow = true;
+                goldGrowCDTimer = goldGrowCD;
+            }
         }
 
         if (!tulipaCanGrow && tulipaGrowCDTimer > 0)
@@ -155,11 +223,11 @@ public class WeedsSpawnSystem : MonoBehaviour
             //SpawnPlant(weed);
             SpawnEvilWeed();
             evilWeedGrowCD -= evilWeedGrowSpeedModifier;
-        }
-
-        if (evilWeedGrowCD <= fastestEvilWeedGrowSpeed)
-        {
-            evilWeedGrowSpeedModifier = 0;
+                if (evilWeedGrowCD <= fastestEvilWeedGrowSpeed)
+                {
+                    evilWeedGrowCD = fastestEvilWeedGrowSpeed;
+                    evilWeedGrowSpeedModifier = 0;
+                }
         }
 
         if (bushCounter < maxBushCounter && bushCanGrow)
@@ -167,11 +235,11 @@ public class WeedsSpawnSystem : MonoBehaviour
             //SpawnPlant(bush);
             SpawnBush();
             bushGrowCD -= bushGrowSpeedModifier;
-        }
-
-        if(bushGrowCD <= fastestBushGrowSpeed)
-        {
-            bushGrowSpeedModifier = 0;
+                if (bushGrowCD <= fastestBushGrowSpeed)
+                {
+                    bushGrowCD = fastestBushGrowSpeed;
+                    bushGrowSpeedModifier = 0;
+                }
         }
 
         if (tulipaCounter < maxTulipaCounter && tulipaCanGrow)
@@ -180,6 +248,38 @@ public class WeedsSpawnSystem : MonoBehaviour
             SpawnTulipa();
         }
 
+        if(greenCounter < maxGreenWeedCounter && greenCanGrow)
+        {
+            SpawnGreenWeed();
+            greenGrowCD -= greenGrowSpeedModifier;
+                if (greenGrowCD <= fastestGreenGrowSpeed)
+                {
+                    greenGrowCD = fastestGreenGrowSpeed;
+                    greenGrowSpeedModifier = 0;
+                }
+        }
+
+        if(bladeCounter < maxBladeWeedConter && bladeCanGrow)
+        {
+            SpawnBladeWeed();
+            bladeGrowCD -= bladeGrowSpeedModifier;
+            if(bladeGrowCD <= fastestBladeGrowSpeed)
+            {
+                bladeGrowCD = fastestBladeGrowSpeed;
+                bladeGrowSpeedModifier = 0;
+            }
+        }
+
+        if(goldCounter < maxGoldenWeedCounter && goldCanGrow)
+        {
+            SpawnGoldWeed();
+            goldGrowCD -= goldGrowSpeedModifier;
+            if(goldGrowCD <= fastestGoldGrowSpeed)
+            {
+                goldGrowCD = fastestGoldGrowSpeed;
+                goldGrowSpeedModifier = 0;
+            }
+        }
     }
 
     //Make tulipas spawn
