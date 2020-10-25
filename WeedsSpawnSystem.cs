@@ -152,7 +152,7 @@ public class WeedsSpawnSystem : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (gameOver.isScoreBased)
+        if (gameOver.isScoreBased || gameOver.isMoraleBased)
         {
             if (!evilWeedCanGrow && evilGrowCDTimer > 0)
             {

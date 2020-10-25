@@ -96,4 +96,11 @@ public class BladeWeed : MonoBehaviour
             }
         }
     }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (slashPoint == null) return;
+
+        Gizmos.DrawWireSphere(slashPoint.position, slashRange);
+    }
 }

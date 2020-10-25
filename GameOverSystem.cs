@@ -9,37 +9,57 @@ using UnityEngine.SceneManagement;
 public class GameOverSystem : MonoBehaviour
 {
     //General variables
-    public bool gameOver = false;
+    [HideInInspector]public bool gameOver = false;
+    [Header("References")]
     public GameObject gameOverMenu;
     public TextMeshProUGUI score;
     public TextMeshProUGUI best;
     public PlayerController player;
     public GameObject nextLevel;
     public GameObject restartLevel;
-    public bool isLastLevel;
-    public bool isScoreBased, isTimeBased, isMoraleBased;
-    
-    //Score-based variables
-    public int requiredScore;
-    private float showedScore = 0f;
-    private float counterSpeed = .8f;
-    
-    //Time-based variables
-    public CountDownSystem countDown;
-    public int requiredPlants;
-    public float pointConvertModifier;
-    private float timeTaken;
-
-    //Morale-based variables
-    public CutnRunSystem cutnRun;
-
     //Data management variables
     public DataManagementSystem data;
     private GameMaster gameMaster;
     private int bestIndex;
     private bool isUpdated = false;
 
+    [Space]
+    [Tooltip("To activate if it is the last level of the game (it will dwactivate the next level option at the game over screen)")]
+    public bool isLastLevel;
+
+    [Header("Game modes")]
+    [Tooltip("Game mode that require to reach a certain amount of points in a given time")]
+    public bool isScoreBased;
+    [Tooltip("Game mode that require to cut a certain number of plants in a given time")]
+    public bool isTimeBased;
+    [Tooltip("Game mode that require the player to constantly cut weeds to never run out of morale")]
+    public bool isMoraleBased;
+    
+    //Score-based variables
+    [Header("Score-based settings")]
+    [Tooltip("Required score to achieve before time ends to win the match")]
+    public int requiredScore;
+    private float showedScore = 0f;
+    private float counterSpeed = .8f;
+    
+    //Time-based variables
+    [Header("Time-based settings")]
+    [Tooltip("Insert the time management gameobject")]
+    public CountDownSystem countDown;
+    [Tooltip("Required plants to cut to win the match")]
+    public int requiredPlants;
+    [Tooltip("Modifier that converts the time left before the match end into points")]
+    public float pointConvertModifier;
+    private float timeTaken;
+
+    //Morale-based variables
+    [Header("Morale-based reference")]
+    [Tooltip("Insert time management gameobject")]
+    public CutnRunSystem cutnRun;
+
+    [Space]
     //Star system variables
+    [Tooltip("Shows how many stars  have been acquired in the current level (Not modify!)")]
     public int aquiredStars;
 
     private void Awake()
