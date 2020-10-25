@@ -1,5 +1,4 @@
-﻿using GDTools;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -16,11 +15,11 @@ public class Tulipa : MonoBehaviour
     private int tulipaGainedPoints;
     public bool isDead;
     private int tulipaHealth = 1;
-    private float addPointsCDTimer;
+    private double addPointsCDTimer;
     public float addPointsCD;
 
     public float byeTulipaCD;
-    private float byeTulipaCDTimer;
+    private double byeTulipaCDTimer;
     private bool byeTulipa = false;
     public bool isBye;
     public GameObject scoreGained;
@@ -46,6 +45,7 @@ public class Tulipa : MonoBehaviour
 
     private void Start()
     {
+        addPointsCDTimer = addPointsCD;
         byeTulipaCDTimer = byeTulipaCD;
         timeLost = (int)(countDown.maxTime / 10);
     }
@@ -54,9 +54,14 @@ public class Tulipa : MonoBehaviour
     {
         if (gameOver.isScoreBased)
         {
-            if (Timer.CoolDown(addPointsCDTimer, addPointsCD) == true)
+            if(addPointsCDTimer > 0)
+            {
+                addPointsCDTimer -= Time.fixedDeltaTime;
+            }
+            else
             {
                 AddPoints();
+                addPointsCDTimer = addPointsCD;
             }
         }
 
