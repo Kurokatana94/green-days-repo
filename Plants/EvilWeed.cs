@@ -1,6 +1,5 @@
 ﻿using TMPro;
 using UnityEngine;
-using GDTools;
 using System;
 
 public class EvilWeed : MonoBehaviour
@@ -29,9 +28,9 @@ public class EvilWeed : MonoBehaviour
 
     //Ints keeping basic data of the plant
     private int 
-        weedPoints = 100,
-        weedMinusPoins = 50,
-        weedHealth = 1,
+        evilPoints = 100,
+        evilMinusPoins = 50,
+        evilHealth = 1,
         timeLost = 5;
 
     //Bool used to check if plant is still alive or not
@@ -55,28 +54,32 @@ public class EvilWeed : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (isSmall && Timer.CoolDown(growCDTimer, growCD) == true)
-        {
-            isSmall = false;
-            isLarge = true;
-            animator.SetBool("IsMedium", true);
-        }
+        if (isSmall) growCDTimer -= Time.fixedDeltaTime;
 
-        if (isLarge)
-        {
-            if(Timer.CoolDown(removePointsCDTimer,removePointsCDTimer))
-            {
-                RemovePoints();
-            }
-        }
+        if (isLarge) removePointsCDTimer -= Time.fixedDeltaTime;
     }
 
 
     private void Update()
     {
-        if (isLarge) collider.enabled = true;
+        if (isSmall & growCDTimer <= 0)
+        {
+            isSmall = false;
+            isLarge = true;
+            collider.enabled = true;
+            animator.SetBool("IsLarge", true);
+        }
 
-        if (weedHealth <= 0)
+        if (isLarge)
+        {
+            if(removePointsCDTimer <= 0)
+            {
+                RemovePoints();
+                removePointsCDTimer = removePointsCD;
+            }
+        }
+
+        if (evilHealth <= 0)
         {
             collider.enabled = false;
             if(!gameOver.isMoraleBased) UpdateScore();
@@ -100,7 +103,7 @@ public class EvilWeed : MonoBehaviour
 
     public void GotHit()
     {
-        weedHealth -= 1;
+        evilHealth -= 1;
     }
 
     private void UpdateScore()
@@ -110,13 +113,13 @@ public class EvilWeed : MonoBehaviour
         {
             if (powerUp.haveX2 == true)
             {
-                player.playerScore += weedPoints * 2;
-                scoreText.text = "+ " + (weedPoints * 2).ToString();
+                player.playerScore += evilPoints * 2;
+                scoreText.text = "+ " + (evilPoints * 2).ToString();
             }
             else
             {
-                player.playerScore += weedPoints;
-                scoreText.text = "+ " + weedPoints.ToString();
+                player.playerScore += evilPoints;
+                scoreText.text = "+ " + evilPoints.ToString();
             }
         }
         else if (gameOver.isTimeBased)
@@ -132,6 +135,8 @@ public class EvilWeed : MonoBehaviour
     }
     public void RemovePoints()
     {
+        Instantiate(scoreLost, transform.position, Quaternion.identity, transform);
+
         if (gameOver.isTimeBased)
         {
             countDown.timeLeft -= timeLost;
@@ -139,8 +144,9 @@ public class EvilWeed : MonoBehaviour
         }
         else if (gameOver.isScoreBased)
         {
-            scoreLostText.text = "- " + weedMinusPoins.ToString();
-            player.playerScore -= weedMinusPoins;
+            scoreLostText.text = "- " + evilMinusPoins.ToString();
+            if (player.playerScore >= evilMinusPoins) player.playerScore -= evilMinusPoins;
+            else player.playerScore = 0;
         }
         else if (gameOver.isMoraleBased)
         {
@@ -151,11 +157,6 @@ public class EvilWeed : MonoBehaviour
         {
             Debug.LogError("The level type has not been assigned");
         }
-        scoreLost.SetActive(true);
-        weeds.evilWeedCounter -= 1;
-        animator.SetTrigger("IsDead");
-        isDead = true;
-        this.enabled = false;
     }
 }
 

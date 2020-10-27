@@ -85,7 +85,7 @@ public class PlayerController : MonoBehaviour
             transform.eulerAngles = new Vector3(0, 180, 0);
         }
 
-        if (powerUp.haveBoots)
+        if (powerUp.haveBoots) 
         {
             speedBoost = speedMultiplier;
         }

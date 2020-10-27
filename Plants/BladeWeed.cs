@@ -14,8 +14,10 @@ public class BladeWeed : MonoBehaviour
     public float slashRange;
     public Transform slashPoint;
     public LayerMask plantLayers;
-
     public int health = 1;
+
+    private double delayTimer = .2;
+    private bool isReady;
 
     //Bool used to check if the plant is still alive or not
     public bool isDead;
@@ -26,15 +28,26 @@ public class BladeWeed : MonoBehaviour
         slash = GameObject.FindGameObjectWithTag("Player").GetComponent<SlashSystem>();
     }
 
+    private void FixedUpdate()
+    {
+        if (health <= 0)
+        {
+            if (delayTimer <= 0) isReady = true;
+            else delayTimer -= Time.fixedDeltaTime;
+        }
+    }
     private void Update()
     {
         if (health <= 0)
         {
-            AoE();
-            weeds.bladeCounter -= 1;
-            animator.SetTrigger("IsDead");
-            isDead = true;
-            this.enabled = false;
+            if (isReady)
+            {
+                AoE();
+                weeds.bladeCounter -= 1;
+                animator.SetTrigger("IsDead");
+                isDead = true;
+                this.enabled = false;
+            }
         }
     }
 
