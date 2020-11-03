@@ -27,6 +27,7 @@ public class DataManagementSystem : MonoBehaviour
 
         GameData data = SaveSystem.LoadGame(gameMaster.lastSlot);
 
+        //Game data
         gameMaster.bestScores = data.bestScores;
         gameMaster.bestTimes = data.bestTimes;
         gameMaster.bestMorales = data.bestMorales;
@@ -34,6 +35,17 @@ public class DataManagementSystem : MonoBehaviour
         gameMaster.totalPoints = data.totalPoints;
         gameMaster.totalStars = data.totalStars;
         gameMaster.bestStars = data.bestStars;
+
+        //Checks wheter skins have been unlocked or not
+        gameMaster.haveSkin = data.haveSkin;
+
+        //Checks which skin is currently activated
+        gameMaster.skin = data.skin;
+
+        //Basic info for the player
+        gameMaster.name = data.name;
+        gameMaster.date = data.date;
+        gameMaster.timePlayed = data.timePlayed;
     }
 
     //Function called in game when willing to save via save/load option
@@ -50,6 +62,7 @@ public class DataManagementSystem : MonoBehaviour
         gameMaster.lastSlot = slotNumber;
         GameData data = SaveSystem.LoadGame(slotNumber);
 
+        //Game data
         gameMaster.bestScores = data.bestScores;
         gameMaster.bestTimes = data.bestTimes;
         gameMaster.bestMorales = data.bestMorales;
@@ -57,6 +70,18 @@ public class DataManagementSystem : MonoBehaviour
         gameMaster.totalPoints = data.totalPoints;
         gameMaster.totalStars = data.totalStars;
         gameMaster.bestStars = data.bestStars;
+
+        //Checks wheter skins have been unlocked or not
+        gameMaster.haveSkin = data.haveSkin;
+
+        //Checks which skin is currently activated
+        gameMaster.skin = data.skin;
+
+        //Basic info for the player
+        gameMaster.name = data.name;
+        gameMaster.date = data.date;
+        gameMaster.timePlayed = data.timePlayed;
+
         SaveSystem.SaveStartData(gameMaster);
     }
 

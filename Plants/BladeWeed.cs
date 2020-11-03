@@ -16,7 +16,7 @@ public class BladeWeed : MonoBehaviour
     public LayerMask plantLayers;
     public int health = 1;
 
-    private double delayTimer = .2;
+    private double delayTimer = .2d;
     private bool isReady;
 
     //Bool used to check if the plant is still alive or not

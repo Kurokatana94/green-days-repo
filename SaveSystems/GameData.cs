@@ -19,6 +19,9 @@ public class GameData
     public List<int> bestMorales = new List<int>();
     public List<int> bestStars = new List<int>();
 
+    public bool[] haveSkin = new bool[4];
+    public bool[] skin = new bool[4];
+
     public GameData(GameMaster gameMaster)
     {
         totalPoints = gameMaster.totalPoints; 
@@ -29,6 +32,14 @@ public class GameData
         bestTimes = gameMaster.bestTimes;
         bestMorales = gameMaster.bestMorales;
         bestStars = gameMaster.bestStars;
+
+        haveSkin = gameMaster.haveSkin;
+
+        skin = gameMaster.skin;
+
+        name = gameMaster.name;
+        date = gameMaster.date;
+        timePlayed = gameMaster.timePlayed;
     }
 }
 

@@ -40,6 +40,7 @@ public class StartScreenSystem : MonoBehaviour
             logo.SetBool("KeyIsPressed", true);
             text.GetComponent<Animator>().SetBool("KeyIsPressed", true);
             panel.SetActive(true);
+            gameMaster.isMainMenuActive = true;
         }
     }
 }
