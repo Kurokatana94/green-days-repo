@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SkinManagementSystem : MonoBehaviour
+public class SkinMenuSystem : MonoBehaviour
 {
     private GameMaster gameMaster;
     public Button[] skinButtons;

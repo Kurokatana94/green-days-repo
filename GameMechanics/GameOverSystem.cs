@@ -50,7 +50,7 @@ public class GameOverSystem : MonoBehaviour
     public int requiredPlants;
     [Tooltip("Modifier that converts the time left before the match end into points")]
     public float pointConvertModifier;
-    private float timeTaken;
+    private double timeTaken;
 
     //Morale-based variables
     [Header("Morale-based reference")]
@@ -220,7 +220,7 @@ public class GameOverSystem : MonoBehaviour
 
         if (countDown.timeLeft > 0)
         {
-            score.text = "Congratulations!!\nYour Time Is:\n\n" + timeTaken.ToString("F2");
+            score.text = "Congratulations!!\nYour Time Is:\n\n" + timeTaken.ToString("F2") + "s";
             nextLevel.SetActive(true);
         }
         else
@@ -236,11 +236,11 @@ public class GameOverSystem : MonoBehaviour
 
             if (countDown.timeLeft > 0f)
             {
-                score.text = "Congrats!! You Finished our Game!\nYour Time Is:\n" + timeTaken.ToString("F2");
+                score.text = "Congrats!! You Finished our Game!\nYour Time Is:\n" + timeTaken.ToString("F2") + "s";
             }
         }
 
-        best.text = "Best Time: " + gameMaster.bestTimes[bestIndex].ToString("F2");
+        best.text = "Best Time: " + gameMaster.bestTimes[bestIndex].ToString("F2") + "s";
     }
 
     //Shows morale and best morale

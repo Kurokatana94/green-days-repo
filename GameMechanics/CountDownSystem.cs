@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class CountDownSystem : MonoBehaviour
 {
-    public float maxTime;
-    public float timeLeft;
+    public double maxTime;
+    public double timeLeft;
     public GameOverSystem gameOverSystem;
     public AudioSource weeds;
 

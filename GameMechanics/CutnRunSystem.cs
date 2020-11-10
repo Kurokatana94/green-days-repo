@@ -34,11 +34,14 @@ public class CutnRunSystem : MonoBehaviour
 
     private void FixedUpdate()
     {
-        time -= Time.deltaTime;
-        if (countDown.timeLeft <= countDown.maxTime -1)
+        if (gameOver.isMoraleBased)
         {
-            maxTime -= .05f;
-            countDown.maxTime--;
+            time -= Time.deltaTime;
+            if (countDown.timeLeft <= countDown.maxTime -1)
+            {
+                maxTime -= .05f;
+                countDown.maxTime--;
+            }
         }
     }
 

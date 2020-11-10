@@ -14,7 +14,7 @@ public class GameData
     public int totalPoints;
     public int totalMoney;
     public int totalStars;
-    public List<float> bestTimes = new List<float>();
+    public List<double> bestTimes = new List<double>();
     public List<int> bestScores = new List<int>();
     public List<int> bestMorales = new List<int>();
     public List<int> bestStars = new List<int>();
