@@ -11,7 +11,7 @@ public class PreviewSwipeSystem : MonoBehaviour
     public float[] pos;
     public float distance;
 
-    private void Start()
+    private void Awake()
     {
         pos = new float[transform.childCount];
         distance = 1f / (pos.Length - 1f);
@@ -92,6 +92,24 @@ public class PreviewSwipeSystem : MonoBehaviour
             {
                 scrollbar.GetComponent<Scrollbar>().value = Mathf.Lerp(scrollbar.GetComponent<Scrollbar>().value, pos[nextPosIndex], 1f * Time.deltaTime);
             } 
+        }
+    }
+
+    /*public void OpenWindow(int index)
+    {
+        scrollPos = pos[index-1];
+        Swipe(pos, index);
+    }*/
+
+    public void OpenWindow(int index)
+    {
+        scrollPos = pos[index - 1];
+        for (int i = 0; i < pos.Length; i++)
+        {
+            if (scrollPos < pos[i] + (distance / 2) && scrollPos > pos[i] - (distance / 2))
+            {
+                scrollbar.GetComponent<Scrollbar>().value = scrollPos;
+            }
         }
     }
 }
