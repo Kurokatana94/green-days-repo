@@ -36,7 +36,9 @@ public class GameMaster : MonoBehaviour
 
     //Items variables to check if acquired and activated
     public bool[] haveSkin = new bool[4];
-    public bool[] skin = new bool[4];
+    public bool[] skinActive = new bool[4];
+    public bool[] haveSkill = new bool[3];
+    public bool[] skillActive = new bool[3];
 
     private void Awake()
     {
@@ -71,16 +73,26 @@ public class GameMaster : MonoBehaviour
         totalPoints = 0;
         acquiredStars = 0;
 
-        skin[0] = true;
-        for (int i = 1; i < skin.Length; i++)
+        skinActive[0] = true;
+        for (int i = 1; i < skinActive.Length; i++)
         {
-            skin[i] = false;
+            skinActive[i] = false;
         }
 
         haveSkin[0] = true;
         for (int i = 1; i < haveSkin.Length; i++)
         {
             haveSkin[i] = false;
+        }
+
+        for (int i = 0; i < skillActive.Length; i++)
+        {
+            skillActive[i] = false;
+        }
+
+        for (int i = 0; i < haveSkill.Length; i++)
+        {
+            haveSkill[i] = false;
         }
 
         for (int i = 0; i < bestScores.Count; i++)

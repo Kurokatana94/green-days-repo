@@ -36,11 +36,13 @@ public class DataManagementSystem : MonoBehaviour
         gameMaster.totalStars = data.totalStars;
         gameMaster.bestStars = data.bestStars;
 
-        //Checks wheter skins have been unlocked or not
+        //Checks wheter skins or skills have been unlocked or not
         gameMaster.haveSkin = data.haveSkin;
+        gameMaster.haveSkill = data.haveSkill;
 
-        //Checks which skin is currently activated
-        gameMaster.skin = data.skin;
+        //Checks which skin and skill is currently activated
+        gameMaster.skinActive = data.skinActive;
+        gameMaster.skillActive = data.skillActive;
 
         //Basic info for the player
         gameMaster.name = data.name;
@@ -73,9 +75,11 @@ public class DataManagementSystem : MonoBehaviour
 
         //Checks wheter skins have been unlocked or not
         gameMaster.haveSkin = data.haveSkin;
+        gameMaster.haveSkill = data.haveSkill;
 
         //Checks which skin is currently activated
-        gameMaster.skin = data.skin;
+        gameMaster.skinActive = data.skinActive;
+        gameMaster.skillActive = data.skillActive;
 
         //Basic info for the player
         gameMaster.name = data.name;

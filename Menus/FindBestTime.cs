@@ -8,13 +8,14 @@ public class FindBestTime : MonoBehaviour
 {
     private GameMaster gameMaster;
     private TextMeshProUGUI text;
-    private int index;
+    public int index;
     public string levelName;
-    public bool byName, byIndex;
+    public bool byIndex, byName;
 
     private void Awake()
     {
         gameMaster = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMaster>();
+        text = gameObject.GetComponent<TextMeshProUGUI>();
     }
 
     private void Start()
@@ -24,9 +25,9 @@ public class FindBestTime : MonoBehaviour
             index = SceneManager.GetSceneByName(levelName).buildIndex;
             text.text = "" + gameMaster.bestTimes[index] + "s";
         }
-        else if(byIndex)
+        else if (byIndex)
         {
-            text.text = "" + gameMaster.bestScores[index];
+            text.text = "" + gameMaster.bestTimes[index] + "s";
         }
     }
 }

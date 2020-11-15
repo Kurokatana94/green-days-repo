@@ -17,7 +17,7 @@ public class SkinUpdate : MonoBehaviour
     {
         for (int i = 0; i < gameMaster.haveSkin.Length; i++)
         {
-            if(gameMaster.skin[i] == true) animator.runtimeAnimatorController = skins[i].runtimeAnimatorController;
+            if(gameMaster.skinActive[i] == true) animator.runtimeAnimatorController = skins[i].runtimeAnimatorController;
         }
     }
 }

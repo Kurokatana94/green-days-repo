@@ -23,10 +23,10 @@ public class SkinMenuSystem : MonoBehaviour
 
     public void SkinButton(int button)
     {
-        for (int i = 0; i < gameMaster.skin.Length; i++)
+        for (int i = 0; i < gameMaster.skinActive.Length; i++)
         {
-            if (i == button) gameMaster.skin[i] = true;
-            else gameMaster.skin[i] = false;
+            if (i == button) gameMaster.skinActive[i] = true;
+            else gameMaster.skinActive[i] = false;
         }
     }
 }

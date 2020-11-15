@@ -27,7 +27,7 @@ public class FindBestScore : MonoBehaviour
         }
         else if (byIndex)
         {
-            text.text = "" + gameMaster.bestScores[index].ToString();
+            text.text = "" + gameMaster.bestScores[index];
         }
     }
 }
