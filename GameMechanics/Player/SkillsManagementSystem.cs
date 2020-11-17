@@ -7,7 +7,7 @@ public class SkillsManagementSystem : MonoBehaviour
 {
     private GameMaster gameMaster;
     private GameObject player;
-    public MonoBehaviour[] skills;
+    public GameObject[] skills;
 
     private void Awake()
     {
@@ -21,11 +21,11 @@ public class SkillsManagementSystem : MonoBehaviour
         {
             if (gameMaster.skillActive[i])
             {
-                skills[i].enabled = true;
+                skills[i].SetActive(true);
             }
             else
             {
-                skills[i].enabled = false;
+                skills[i].SetActive(false);
             }
         }
     }
