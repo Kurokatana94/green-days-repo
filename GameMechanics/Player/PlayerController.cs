@@ -18,9 +18,8 @@ public class PlayerController : MonoBehaviour
     private PowerUpSpawnSystem powerUp;
     public bool canWalk = true;
     
-    //Boots power up variables
-    private float speedBoost;
-    public float speedMultiplier;
+    //Speed Up skill variables
+    public float speedMultiplier, speedBoost ;
 
     //Scythe power up variables
     private SlashSystem slash;
@@ -85,7 +84,7 @@ public class PlayerController : MonoBehaviour
             transform.eulerAngles = new Vector3(0, 180, 0);
         }
 
-        if (powerUp.haveBoots) 
+        /*if (powerUp.haveBoots) 
         {
             speedBoost = speedMultiplier;
         }
@@ -103,7 +102,7 @@ public class PlayerController : MonoBehaviour
             slash.slashRate = slashRateDefault;
         }
 
-        /*if (powerUp.haveX2)
+        if (powerUp.haveX2)
         {
             gainedPoints *= 2;
         }*/

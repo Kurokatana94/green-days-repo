@@ -17,7 +17,7 @@ public class GameMaster : MonoBehaviour
     //Save Slot data variables
     public string name;
     public DateTime date;
-    public int timePlayed;
+    public double timePlayed;
 
     // GameData variables to store
     public int totalPoints;
@@ -50,6 +50,14 @@ public class GameMaster : MonoBehaviour
         else
         {
             Destroy(gameObject);
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if(SceneManager.GetActiveScene().buildIndex != 0)
+        {
+            timePlayed += Time.fixedDeltaTime;
         }
     }
 

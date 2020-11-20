@@ -12,6 +12,7 @@ public class Bush : MonoBehaviour
     private PowerUpSpawnSystem powerUp;
     public CircleCollider2D collider;
     private RangedAttackSystem ranged;
+    private SwirlAttackSystem swirl;
 
     private int
         currentHealth,
@@ -32,6 +33,7 @@ public class Bush : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         powerUp = GameObject.FindGameObjectWithTag("Player").GetComponent<PowerUpSpawnSystem>();
         ranged = GameObject.FindGameObjectWithTag("Skill").GetComponent<RangedAttackSystem>();
+        swirl = GameObject.FindGameObjectWithTag("Skill").GetComponent<SwirlAttackSystem>();
     }
 
     private void Start()
@@ -41,7 +43,7 @@ public class Bush : MonoBehaviour
 
     private void Update()
     {
-        if (!ranged.isActive && ranged.isReady) alreadyHit = false;
+        if (!ranged.isActive && ranged.isReady || !swirl.isActive && swirl.isReady) alreadyHit = false;
 
         if (bushHealth < currentHealth && bushHealth != 0 && gameOver.isScoreBased)
         {

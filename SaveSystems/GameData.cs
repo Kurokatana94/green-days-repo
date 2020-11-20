@@ -9,7 +9,7 @@ public class GameData
 {
     public string name;
     public DateTime date;
-    public int timePlayed;
+    public double timePlayed;
 
     public int totalPoints;
     public int totalMoney;
