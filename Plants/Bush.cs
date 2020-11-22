@@ -45,7 +45,7 @@ public class Bush : MonoBehaviour
     {
         if (!ranged.isActive && ranged.isReady || !swirl.isActive && swirl.isReady) alreadyHit = false;
 
-        if (bushHealth < currentHealth && bushHealth != 0 && gameOver.isScoreBased)
+        if (bushHealth < currentHealth && bushHealth > 0 && gameOver.isScoreBased)
         {
             bushPoints = hitPoints;
             AddPoints();
