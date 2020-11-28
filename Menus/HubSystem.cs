@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class HubSystem : MonoBehaviour
 {
-    public TextMeshProUGUI moneyTxt, totalStarsTxt, acquiredStarsTxt;
+    public TextMeshProUGUI moneyTxt, acquiredStarsTxt;
     private int totalStars, acquiredStars;
     private GameMaster gameMaster;
     private void Awake()
@@ -20,10 +20,9 @@ public class HubSystem : MonoBehaviour
             acquiredStars += stars;
         }
         gameMaster.acquiredStars = acquiredStars;
-        acquiredStarsTxt.text = "" + acquiredStars.ToString();
-
         totalStars = gameMaster.totalStars;
-        totalStarsTxt.text = "" + totalStars.ToString();
+
+        acquiredStarsTxt.text = acquiredStars.ToString() + " / " + totalStars.ToString();
     }
 
     private void Update()
