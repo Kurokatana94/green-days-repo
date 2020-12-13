@@ -4,17 +4,30 @@ using UnityEngine;
 
 public class SwirlAttackSystem : MonoBehaviour
 {
-    public float skillRange;
     public Transform skillPoint;
     public Animator animator;
     public LayerMask plantLayers;
     public AudioSource audio;
+    public GameObject icon;
+    public GameObject frame;
+    private PlayerController player;
+    public float skillRange;
     public float skillCD;
     public double skillCDTimer;
 
 
     //Bool used to check if reset timer in cutter run mode
     public bool hasHit, isActive, isReady;
+
+    private void Awake()
+    {
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+    }
+
+    private void Start()
+    {
+        icon.SetActive(true);
+    }
 
     private void FixedUpdate()
     {
@@ -34,7 +47,16 @@ public class SwirlAttackSystem : MonoBehaviour
         if (Input.GetButtonDown("Skill") && !isActive && isReady)
         {
             isActive = true;
+            if (player.facingRight)
+            {
+                transform.parent.transform.eulerAngles = new Vector3(0, 0, 0);
+            }
+            else
+            {
+                transform.parent.transform.eulerAngles = new Vector3(0, 180, 0);
+            }
             animator.SetTrigger("IsActivated");
+            frame.SetActive(true);
         }
 
         if (isActive)
@@ -61,11 +83,10 @@ public class SwirlAttackSystem : MonoBehaviour
                 plant.GetComponent<Tulipa>().GotHit();
                 audio.Play();
             }
-            else if (plant.CompareTag("Bush") && !plant.GetComponent<Bush>().alreadyHit)
+            else if (plant.CompareTag("Bush"))
             {
                 plant.GetComponent<Bush>().GotHit();
                 audio.Play();
-                plant.GetComponent<Bush>().alreadyHit = true;
             }
             else if (plant.CompareTag("Green"))
             {

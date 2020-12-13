@@ -21,7 +21,7 @@ public class Tulipa : MonoBehaviour
     public float byeTulipaCD;
     private double byeTulipaCDTimer;
     private bool byeTulipa = false;
-    public bool isBye;
+    public bool isBye, cycleEnded;
     public GameObject scoreGained;
     public TextMeshPro scoreGainedText;
     public GameObject scoreLost;
@@ -54,14 +54,15 @@ public class Tulipa : MonoBehaviour
     {
         if (gameOver.isScoreBased)
         {
-            if(addPointsCDTimer > 0)
+            if(addPointsCDTimer > 0 && cycleEnded)
             {
                 addPointsCDTimer -= Time.fixedDeltaTime;
             }
-            else
+            else if(addPointsCDTimer <= 0)
             {
                 AddPoints();
                 addPointsCDTimer = addPointsCD;
+                cycleEnded = false;
             }
         }
 

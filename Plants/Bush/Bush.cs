@@ -11,19 +11,20 @@ public class Bush : MonoBehaviour
     public Animator animator;
     private PowerUpSpawnSystem powerUp;
     public CircleCollider2D collider;
-    private RangedAttackSystem ranged;
-    private SwirlAttackSystem swirl;
 
     private int
         currentHealth,
         bushPoints,
         hitPoints = 50,
         deathPoints = 200;
-    public bool isDead, alreadyHit;
+    public int 
+        bushHealth = 3, 
+        hitRate = 1;
+    private float nextHitTime;
+    public bool isDead;
     public GameObject scoreGainedBush;
     public GameObject scoreFeedback;
     public TextMeshPro scoreText, scoreGainedText;
-    public int bushHealth = 3;
     private GameOverSystem gameOver;
 
     private void Awake()
@@ -32,8 +33,6 @@ public class Bush : MonoBehaviour
         bushes = GameObject.FindGameObjectWithTag("Spawner").GetComponent<WeedsSpawnSystem>();
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         powerUp = GameObject.FindGameObjectWithTag("Player").GetComponent<PowerUpSpawnSystem>();
-        ranged = GameObject.FindGameObjectWithTag("Skill").GetComponent<RangedAttackSystem>();
-        swirl = GameObject.FindGameObjectWithTag("Skill").GetComponent<SwirlAttackSystem>();
     }
 
     private void Start()
@@ -43,7 +42,14 @@ public class Bush : MonoBehaviour
 
     private void Update()
     {
-        if (!ranged.isActive && ranged.isReady || !swirl.isActive && swirl.isReady) alreadyHit = false;
+        if (Time.time >= nextHitTime)
+        {
+            if (Input.GetButtonDown("Slash"))
+            {
+                GotHit();
+                nextHitTime = Time.time + 1f / hitRate;
+            }
+        }
 
         if (bushHealth < currentHealth && bushHealth > 0 && gameOver.isScoreBased)
         {
@@ -78,7 +84,6 @@ public class Bush : MonoBehaviour
     {
         bushHealth -= 1;
         animator.SetInteger("CurrentHealth", bushHealth);
-        alreadyHit = true;
     }
 
     private void UpdateScore()

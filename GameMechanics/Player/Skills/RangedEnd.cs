@@ -23,6 +23,7 @@ public class RangedEnd : StateMachineBehaviour
     {
         ranged.isActive = false;
         ranged.isReady = false;
+        ranged.frame.SetActive(false);
         player.canWalk = true;
     }
 }

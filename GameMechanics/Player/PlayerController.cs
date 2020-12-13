@@ -7,8 +7,8 @@ public class PlayerController : MonoBehaviour
 {
     //General variables
     private Rigidbody2D rb;
-    private bool facingRight;
-    private bool facingLeft;
+    public bool facingRight;
+    public bool facingLeft;
     public float speed;
     private float realSpeed;
     private float moveInputHorizontal;

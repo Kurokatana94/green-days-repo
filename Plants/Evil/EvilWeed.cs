@@ -18,6 +18,7 @@ public class EvilWeed : MonoBehaviour
     public TextMeshPro scoreText;
     public GameObject scoreLost;
     public TextMeshPro scoreLostText;
+    public bool cycleEnded;
 
     //Bools used to check whether the plant is ready to grow or should apply its mechanic
     public bool isSmall, isLarge;
@@ -50,13 +51,17 @@ public class EvilWeed : MonoBehaviour
     {
         isSmall = true;
         growCDTimer = growCD;
+        removePointsCDTimer = removePointsCD;
     }
 
     private void FixedUpdate()
     {
         if (isSmall) growCDTimer -= Time.fixedDeltaTime;
 
-        if (isLarge) removePointsCDTimer -= Time.fixedDeltaTime;
+        if (isLarge)
+        {
+            if (removePointsCDTimer > 0 && cycleEnded) removePointsCDTimer -= Time.fixedDeltaTime;
+        }
     }
 
 
@@ -76,6 +81,7 @@ public class EvilWeed : MonoBehaviour
             {
                 RemovePoints();
                 removePointsCDTimer = removePointsCD;
+                cycleEnded = false;
             }
         }
 
