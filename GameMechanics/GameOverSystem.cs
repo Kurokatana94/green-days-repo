@@ -334,10 +334,12 @@ public class GameOverSystem : MonoBehaviour
         {
             if (cutnRun.morale <= 0) isSuccessful = false;
             else isSuccessful = true;
-        }else if (isTimeBased)
+        }
+        else if (isTimeBased)
         {
             if (player.plantsKilled < requiredPlants) isSuccessful = false;
-        }else if (isScoreBased)
+        }
+        else if (isScoreBased)
         {
             if (player.playerScore < requiredScore) isSuccessful = false;
             else isSuccessful = true;

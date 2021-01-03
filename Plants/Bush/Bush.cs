@@ -9,7 +9,6 @@ public class Bush : MonoBehaviour
     private WeedsSpawnSystem bushes;
     private PlayerController player;
     public Animator animator;
-    private PowerUpSpawnSystem powerUp;
     public CircleCollider2D collider;
 
     private int
@@ -19,7 +18,7 @@ public class Bush : MonoBehaviour
         deathPoints = 200;
     public int 
         bushHealth = 3, 
-        hitRate = 1;
+        hitRate = 3;
     private float nextHitTime;
     public bool isDead;
     public GameObject scoreGainedBush;
@@ -32,7 +31,6 @@ public class Bush : MonoBehaviour
         gameOver = GameObject.FindGameObjectWithTag("GO").GetComponent<GameOverSystem>();
         bushes = GameObject.FindGameObjectWithTag("Spawner").GetComponent<WeedsSpawnSystem>();
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
-        powerUp = GameObject.FindGameObjectWithTag("Player").GetComponent<PowerUpSpawnSystem>();
     }
 
     private void Start()
@@ -42,14 +40,6 @@ public class Bush : MonoBehaviour
 
     private void Update()
     {
-        if (Time.time >= nextHitTime)
-        {
-            if (Input.GetButtonDown("Slash"))
-            {
-                GotHit();
-                nextHitTime = Time.time + 1f / hitRate;
-            }
-        }
 
         if (bushHealth < currentHealth && bushHealth > 0 && gameOver.isScoreBased)
         {
@@ -82,8 +72,12 @@ public class Bush : MonoBehaviour
 
     public void GotHit()
     {
-        bushHealth -= 1;
-        animator.SetInteger("CurrentHealth", bushHealth);
+        if (Time.time >= nextHitTime)
+        {
+            bushHealth -= 1;
+            animator.SetInteger("CurrentHealth", bushHealth);
+            nextHitTime = Time.time + 1f / hitRate;
+        }
     }
 
     private void UpdateScore()
@@ -91,16 +85,8 @@ public class Bush : MonoBehaviour
         scoreFeedback.SetActive(true);
         if (gameOver.isScoreBased)
         {
-            if (powerUp.haveX2 == true)
-            {
-                player.playerScore += bushPoints * 2;
-                scoreText.text = "+ " + (bushPoints * 2).ToString();
-            }
-            else
-            {
-                player.playerScore += bushPoints;
-                scoreText.text = "+ " + bushPoints.ToString();
-            }
+            player.playerScore += bushPoints;
+            scoreText.text = "+ " + bushPoints.ToString();
         }else if (gameOver.isTimeBased)
         {
             player.plantsKilled++;
@@ -118,16 +104,9 @@ public class Bush : MonoBehaviour
     {
         scoreGainedText.text = "";
 
-        if (powerUp.haveX2 == true)
-        {
-            player.playerScore += bushPoints * 2;
-            scoreGainedText.text = "+ " + (bushPoints * 2).ToString();
-        }
-        else
-        {
-            player.playerScore += bushPoints;
-            scoreGainedText.text = "+ " + bushPoints.ToString();
-        }
+        player.playerScore += bushPoints;
+        scoreGainedText.text = "+ " + bushPoints.ToString();
+
         currentHealth = bushHealth;
         Instantiate(scoreGainedBush, transform.position, Quaternion.identity, transform);
     }   

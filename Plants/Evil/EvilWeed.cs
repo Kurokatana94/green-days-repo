@@ -7,7 +7,6 @@ public class EvilWeed : MonoBehaviour
     private WeedsSpawnSystem weeds;
     private PlayerController player;
     public Animator animator;
-    private PowerUpSpawnSystem powerUp;
     private GameOverSystem gameOver;
     public CircleCollider2D collider, triggerCollider;
     private CountDownSystem countDown;
@@ -41,7 +40,6 @@ public class EvilWeed : MonoBehaviour
     {
         weeds = GameObject.FindGameObjectWithTag("Spawner").GetComponent<WeedsSpawnSystem>();
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
-        powerUp = GameObject.FindGameObjectWithTag("Player").GetComponent<PowerUpSpawnSystem>();
         gameOver = GameObject.FindGameObjectWithTag("GO").GetComponent<GameOverSystem>();
         cutnRun = GameObject.FindGameObjectWithTag("CD").GetComponent<CutnRunSystem>();
         countDown = GameObject.FindGameObjectWithTag("CD").GetComponent<CountDownSystem>();
@@ -117,16 +115,8 @@ public class EvilWeed : MonoBehaviour
         scoreFeedback.SetActive(true);
         if (gameOver.isScoreBased)
         {
-            if (powerUp.haveX2 == true)
-            {
-                player.playerScore += evilPoints * 2;
-                scoreText.text = "+ " + (evilPoints * 2).ToString();
-            }
-            else
-            {
-                player.playerScore += evilPoints;
-                scoreText.text = "+ " + evilPoints.ToString();
-            }
+            player.playerScore += evilPoints;
+            scoreText.text = "+ " + evilPoints.ToString();
         }
         else if (gameOver.isTimeBased)
         {

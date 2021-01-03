@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 //Script containing various function used in shops
 public class ShopSystem : MonoBehaviour
@@ -11,6 +12,8 @@ public class ShopSystem : MonoBehaviour
     public float currentExchangeRate;
     public Button[] skinButtons;
     public Button[] skillButtons;
+    public GameObject skills, skins;
+    public TextMeshProUGUI skinPrice, skillPrice;
 
     //Items list with 'name', 'cost' and 'starting quantity' as requirement
     public Item item = new Item("Sample Item 750", 500, 0);
@@ -18,20 +21,22 @@ public class ShopSystem : MonoBehaviour
     //Special items list with 'name', 'cost', and boolean to check if the item 
     //will be aquired at the start (skins)
     public SpecialItem basicSkin = new SpecialItem("Basic skin beff", 0, true);
-    public SpecialItem skin1 = new SpecialItem("Skin 1 ", 10000, false);
-    public SpecialItem skin2 = new SpecialItem("Skin 2 ", 10000, false);
-    public SpecialItem skin3 = new SpecialItem("Skin 3 ", 10000, false);
+    public SpecialItem skin1 = new SpecialItem("Old Beff", 20000, false);
+    public SpecialItem skin2 = new SpecialItem("Skin 2", 10000, false);
+    public SpecialItem skin3 = new SpecialItem("Skin 3", 10000, false);
 
     private SpecialItem[] skin = new SpecialItem[4];
 
     //Special items list with 'name', 'cost', and boolean to check if the item 
     //will be aquired at the start (skills)
-    public SpecialItem skill1 = new SpecialItem("Skill 1", 1000, false);
-    public SpecialItem skill2 = new SpecialItem("Skill 2", 5000, false);
-    public SpecialItem skill3 = new SpecialItem("Skill 3", 10000, false);
+    public SpecialItem skill1 = new SpecialItem("Fast Walk", 1000, false);
+    public SpecialItem skill2 = new SpecialItem("Boomerang Blade", 5000, false);
+    public SpecialItem skill3 = new SpecialItem("Tornado Blade", 10000, false);
 
     private SpecialItem[] skill = new SpecialItem[3];
 
+    //Ints needed to navigate throught the shops items
+    private int skinN, skillN;
     private void Awake()
     {
         gameMaster = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMaster>();
@@ -44,50 +49,109 @@ public class ShopSystem : MonoBehaviour
         skill[0] = skill1;
         skill[1] = skill2;
         skill[2] = skill3;
+
+        skillButtons = new Button[skills.transform.childCount];
+        skinButtons = new Button[skins.transform.childCount];
     }
 
     private void Start()
     {
-        for (int i = 1; i < skinButtons.Length; i++)
+        skinN = 0;
+        skillN = 0;
+
+        UpdateButtonArray(skills, skillButtons);
+        UpdateButtonArray(skins, skinButtons);
+
+        UpdateSelection(skillButtons[skillN]);
+        UpdateSelection(skinButtons[skinN]);
+
+        for (int i = 1; i <= skinButtons.Length; i++)
         {
+            skinButtons[i - 1].transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = skin[i].name;
+            Debug.Log("Updated "+skinButtons[i-1]+" name to " + skin[i].name);
             if (gameMaster.haveSkin[i])
             {
-                skinButtons[i--].interactable = false;
+                skinButtons[i-1].interactable = false;
             }
         }
 
         for (int i = 0; i < skillButtons.Length; i++)
         {
+            skillButtons[i].transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = skill[i].name;
+            Debug.Log("Updated "+ skillButtons[i]+" name to " + skill[i].name);
             if (gameMaster.haveSkill[i])
             {
                 skillButtons[i].interactable = false;
             }
         }
     }
-    //Function used to buy unique items (unlock skils, skins, etc.)
-    public void BuySkin(int n)
+
+    private void UpdateButtonArray(GameObject type, Button[] list)
     {
-        BuyOnce(skin[n]);
-        if (skin[n].isAquired)
+        for (int i = 0; i < type.transform.childCount; i++)
         {
-            gameMaster.haveSkin[n] = true;
-            skinButtons[n--].interactable = false;
+            list[i] = type.transform.GetChild(i).gameObject.GetComponent<Button>();
+            Debug.Log("Adding " + list[i] + " to list.");
         }
     }
 
-    public void BuySkill(int n)
+    //Function used to update current selected item in the shop
+    public void UpdateSelection(Button button)
     {
-        n--;
-        BuyOnce(skill[n]);
-        if (skill[n].isAquired)
+        for (int i = 1; i <= skinButtons.Length; i++)
         {
-            gameMaster.haveSkill[n] = true;
-            skillButtons[n].interactable = false;
+            if(skinButtons[i-1] == button)
+            {
+                skinN = i;
+                skinPrice.text = skin[skinN].cost.ToString();
+                if (gameMaster.haveSkin[skinN])
+                {
+                    skinPrice.text = "Sold Out!";
+                }
+                Debug.Log("Updated price.");
+            }
+        }
+
+        for (int i = 0; i < skillButtons.Length; i++)
+        {
+            if(skillButtons[i] == button)
+            {
+                skillN = i;
+                skillPrice.text = skill[skillN].cost.ToString();
+                if (gameMaster.haveSkill[skillN])
+                {
+                    skillPrice.text = "Sold Out!";
+                }
+                Debug.Log("Updated price.");
+            }
+        }
+    }
+
+    //Function used to buy unique items (unlock skills, skins, etc.)
+    public void BuySkin()
+    {
+        BuyOnce(skin[skinN]);
+        if (skin[skinN].isAquired)
+        {
+            gameMaster.haveSkin[skinN] = true;
+            skinButtons[skinN - 1].interactable = false;
+            skinPrice.text = "Sold Out!";
+        }
+    }
+
+    public void BuySkill()
+    {
+        BuyOnce(skill[skillN]);
+        if (skill[skillN].isAquired)
+        {
+            gameMaster.haveSkill[skillN-1] = true;
+            skillButtons[skillN].interactable = false;
+            skillPrice.text = "Sold Out!";
         }
     }
 
     //Function used to buy consumable items
-    public void BuyItem()
+    /*public void BuyItem()
     {
         BuyMany(item);
         data.AutoSaveGame();
@@ -105,7 +169,7 @@ public class ShopSystem : MonoBehaviour
         {
             Debug.Log("Not enough money");
         }
-    }
+    }*/
 
     private void BuyOnce(SpecialItem specialItem)
     {
@@ -113,7 +177,7 @@ public class ShopSystem : MonoBehaviour
         {
             gameMaster.totalMoney -= specialItem.cost;
             specialItem.isAquired = true;
-            Debug.Log("You buyed a special item");
+            Debug.Log("You bought a special item");
         }
         else
         {
@@ -136,5 +200,13 @@ public class ShopSystem : MonoBehaviour
         }
 
         data.AutoSaveGame();
+    }
+
+    public void ResetAtClose()
+    {
+        skinN = 0;
+        skillN = 0;
+        UpdateSelection(skinButtons[skinN]);
+        UpdateSelection(skillButtons[skillN]);
     }
 }

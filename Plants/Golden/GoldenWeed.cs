@@ -9,7 +9,6 @@ public class GoldenWeed : MonoBehaviour
     private WeedsSpawnSystem weeds;
     private PlayerController player;
     public Animator animator;
-    private PowerUpSpawnSystem powerUp;
     private GameOverSystem gameOver;
     public GameObject scoreFeedback;
     public TextMeshPro scoreText;
@@ -22,7 +21,6 @@ public class GoldenWeed : MonoBehaviour
         gameOver = GameObject.FindGameObjectWithTag("GO").GetComponent<GameOverSystem>();
         weeds = GameObject.FindGameObjectWithTag("Spawner").GetComponent<WeedsSpawnSystem>();
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
-        powerUp = GameObject.FindGameObjectWithTag("Player").GetComponent<PowerUpSpawnSystem>();
     }
 
     private void Update()
@@ -59,16 +57,8 @@ public class GoldenWeed : MonoBehaviour
         scoreFeedback.SetActive(true);
         if (gameOver.isScoreBased)
         {
-            if (powerUp.haveX2 == true)
-            {
-                player.playerScore += points * 2;
-                scoreText.text = "+ " + (points * 2).ToString();
-            }
-            else
-            {
-                player.playerScore += points;
-                scoreText.text = "+ " + points.ToString();
-            }
+            player.playerScore += points;
+            scoreText.text = "+ " + points.ToString();
         }
         else if (gameOver.isTimeBased)
         {

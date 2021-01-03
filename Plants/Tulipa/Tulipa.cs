@@ -8,7 +8,6 @@ public class Tulipa : MonoBehaviour
 {
     private WeedsSpawnSystem weeds;
     private PlayerController player;
-    private PowerUpSpawnSystem powerUp;
     public Animator animator;
     private Transform transform;
     public int tulipaPoints;
@@ -40,7 +39,6 @@ public class Tulipa : MonoBehaviour
         gameOver = GameObject.FindGameObjectWithTag("GO").GetComponent<GameOverSystem>();
         weeds = GameObject.FindGameObjectWithTag("Spawner").GetComponent<WeedsSpawnSystem>();
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
-        powerUp = GameObject.FindGameObjectWithTag("Player").GetComponent<PowerUpSpawnSystem>();
     }
 
     private void Start()
@@ -129,18 +127,10 @@ public class Tulipa : MonoBehaviour
     {
         Instantiate(scoreGained, transform.position, Quaternion.identity, transform);
 
-        if (powerUp.haveX2 == true)
-        {
-            player.playerScore += tulipaPoints * 2;
-            tulipaGainedPoints += tulipaPoints * 2;
-            scoreGainedText.text = "+ " + (tulipaPoints * 2).ToString();
-        }
-        else
-        {
-            player.playerScore += tulipaPoints;
-            tulipaGainedPoints += tulipaPoints;
-            scoreGainedText.text = "+ " + tulipaPoints.ToString();
-        }
+        player.playerScore += tulipaPoints;
+        tulipaGainedPoints += tulipaPoints;
+
+        scoreGainedText.text = "+ " + tulipaPoints.ToString();
     }
 
     //Make tulipa despawn after her life span finished
