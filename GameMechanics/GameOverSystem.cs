@@ -32,7 +32,7 @@ public class GameOverSystem : MonoBehaviour
     private bool isUpdated = false;
 
     [Space]
-    [Tooltip("To activate if it is the last level of the game (it will dwactivate the next level option at the game over screen)")]
+    [Tooltip("To activate if it is the last level of the game (it will deactivate the next level option at the game over screen)")]
     public bool isLastLevel;
 
     [Header("Game modes")]
@@ -47,16 +47,23 @@ public class GameOverSystem : MonoBehaviour
     private bool firstTime = true;
 
     //Bool used to check if the specific level sidequest has been completed
+    [HideInInspector]
     public bool sideQuestComplete;
+    [HideInInspector]
     public bool sideQuestAlreadyComplete;
 
     //Money gained with level completition and different bonuses options
     [Header("Rewards")]
     [Tooltip("Base money gained upon level completition")]
     public int baseMoneyReward;
+    [Tooltip("Bonus reward gained for each new star obtained (if a star will be obtained a second time, the reward will be the same devided by 10)")]
     public int starBonus;
+    [Tooltip("Bonus reward gained for creating a new best score")]
     public int bestScoreBonus;
+    [Tooltip("Bonus reward gained upon first completition of the current level")]
     public int firstTimeBonus;
+    [Tooltip("Bonus reward gained whether the player will complete the current level sidequest (if a sidequest will be completed a second time," +
+        " the reward will be the same devided by 10)")]
     public int sideQuestBonus;
     private int totalReward;
     
