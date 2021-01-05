@@ -37,6 +37,7 @@ public class ShopSystem : MonoBehaviour
 
     //Ints needed to navigate throught the shops items
     private int skinN, skillN;
+
     private void Awake()
     {
         gameMaster = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMaster>();
@@ -86,6 +87,7 @@ public class ShopSystem : MonoBehaviour
         }
     }
 
+    //Function that autoset an array with the correct needed button in the hierarchy
     private void UpdateButtonArray(GameObject type, Button[] list)
     {
         for (int i = 0; i < type.transform.childCount; i++)
@@ -127,7 +129,7 @@ public class ShopSystem : MonoBehaviour
         }
     }
 
-    //Function used to buy unique items (unlock skills, skins, etc.)
+    //Functions used to buy unique items (unlock skills, skins, etc.)
     public void BuySkin()
     {
         BuyOnce(skin[skinN]);
@@ -171,6 +173,7 @@ public class ShopSystem : MonoBehaviour
         }
     }*/
 
+    //Function used to buy special items that can be bought just once (e.g. skins)
     private void BuyOnce(SpecialItem specialItem)
     {
         if(gameMaster.totalMoney >= specialItem.cost && !specialItem.isAquired)

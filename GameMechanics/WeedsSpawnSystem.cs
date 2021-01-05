@@ -107,7 +107,7 @@ public class WeedsSpawnSystem : MonoBehaviour
 
     public GameOverSystem gameOver;
 
-    private float minX = -5.6f, maxX = 5.6f, minY = -4.1f, maxY = 2f;
+    private float minX = -5.6f, maxX = 5.6f, minY = -3.7f, maxY = 2.45f;
 
     //Spawn methods variables --------
 

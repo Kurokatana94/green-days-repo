@@ -42,6 +42,23 @@ public class GameOverSystem : MonoBehaviour
     public bool isTimeBased;
     [Tooltip("Game mode that require the player to constantly cut weeds to never run out of morale")]
     public bool isMoraleBased;
+
+    //Bool used in function to check whether it is the first time playing the level or not
+    private bool firstTime = true;
+
+    //Bool used to check if the specific level sidequest has been completed
+    public bool sideQuestComplete;
+    public bool sideQuestAlreadyComplete;
+
+    //Money gained with level completition and different bonuses options
+    [Header("Rewards")]
+    [Tooltip("Base money gained upon level completition")]
+    public int baseMoneyReward;
+    public int starBonus;
+    public int bestScoreBonus;
+    public int firstTimeBonus;
+    public int sideQuestBonus;
+    private int totalReward;
     
     //Score-based variables
     [Header("Score-based settings")]
@@ -49,6 +66,8 @@ public class GameOverSystem : MonoBehaviour
     public int requiredScore;
     private float showedScore = 0f;
     private float counterSpeed = .8f;
+    [Tooltip("Minimum amount of points required to acquire each star")]
+    public int oneStarScore, twoStarsScore, threeStarsScore;
     
     //Time-based variables
     [Header("Time-based settings")]
@@ -59,16 +78,21 @@ public class GameOverSystem : MonoBehaviour
     [Tooltip("Modifier that converts the time left before the match end into points")]
     public float pointConvertModifier;
     private double timeTaken;
+    [Tooltip("Max amount of time required to acquire each star")]
+    public double oneStarTime, twoStarsTime, threeStarsTime;
 
     //Morale-based variables
     [Header("Morale-based reference")]
     [Tooltip("Insert time management gameobject")]
     public CutnRunSystem cutnRun;
+    [Tooltip("Minimum amount of morale required to acquire each star")]
+    public int oneStarMorale, twoStarsMorale, threeStarsMorale;
 
     [Space]
     //Star system variables
     [Tooltip("Shows how many stars  have been acquired in the current level (Not modify!)")]
-    public int aquiredStars;
+    public int acquiredStars;
+    private int preAcquiredStars;
 
     private void Awake()
     {
@@ -78,7 +102,9 @@ public class GameOverSystem : MonoBehaviour
     private void Start()
     {
         bestIndex = SceneManager.GetActiveScene().buildIndex;
-        aquiredStars = gameMaster.bestStars[bestIndex];
+        acquiredStars = gameMaster.bestStars[bestIndex];
+        preAcquiredStars = acquiredStars;
+        CheckIfFirstTime();
     }
 
     private void Update()
@@ -96,7 +122,7 @@ public class GameOverSystem : MonoBehaviour
             {
                 timeTaken = countDown.maxTime - countDown.timeLeft;
                 GameOver();
-                for (int i = 0; i < aquiredStars; i++)
+                for (int i = 0; i < acquiredStars; i++)
                 {
                     stars[i].SetActive(true);
                 }
@@ -145,6 +171,7 @@ public class GameOverSystem : MonoBehaviour
         }
     }
 
+    //Function that is activated if the level is lost
     private void TryAgain()
     {
         tryAgainMenu.SetActive(true);
@@ -182,7 +209,6 @@ public class GameOverSystem : MonoBehaviour
 
             if (isMoraleBased) player.playerScore = cutnRun.morale * 100;
 
-            gameMaster.totalPoints += player.playerScore;
 
             if (gameMaster.bestScores[bestIndex] < player.playerScore)
             {
@@ -202,11 +228,15 @@ public class GameOverSystem : MonoBehaviour
                 newBest = true;
             }
 
-            if (gameMaster.bestStars[bestIndex] < aquiredStars)
+            if (gameMaster.bestStars[bestIndex] < acquiredStars)
             {
-                gameMaster.totalStars += aquiredStars - gameMaster.bestStars[bestIndex];
-                gameMaster.bestStars[bestIndex] = aquiredStars;
-            } 
+                gameMaster.totalStars += acquiredStars - gameMaster.bestStars[bestIndex];
+                gameMaster.bestStars[bestIndex] = acquiredStars;
+            }
+
+            TotalReward();
+
+            gameMaster.totalMoney += totalReward;
         }
     }
 
@@ -256,56 +286,57 @@ public class GameOverSystem : MonoBehaviour
         }
     }
 
+    //Checks using preset requirement whether the player reached the required points amount to obtain stars or not
     private void StarEvaluation()
     {
-        if (aquiredStars < 3)
+        if (acquiredStars < 3)
         {
             if (isScoreBased)
             {
-                if (player.playerScore < requiredScore / 2)
+                if (player.playerScore < oneStarScore)
                 {
                     return;
                 }
-                else if (player.playerScore >= requiredScore / 2 && player.playerScore < requiredScore && aquiredStars <= 1)
+                else if (player.playerScore >= oneStarScore && player.playerScore < twoStarsScore && acquiredStars <= 1)
                 {
-                    aquiredStars = 1;
+                    acquiredStars = 1;
                 }
-                else if (player.playerScore >= requiredScore && player.playerScore < requiredScore * 1.5f && aquiredStars <= 2)
+                else if (player.playerScore >= twoStarsScore && player.playerScore < threeStarsScore && acquiredStars <= 2)
                 {
-                    aquiredStars = 2;
+                    acquiredStars = 2;
                 }
-                else if (player.playerScore > requiredScore * 1.5)
+                else if (player.playerScore > threeStarsScore)
                 {
-                    aquiredStars = 3;
+                    acquiredStars = 3;
                 }
                 else return;
             }
             else if (isTimeBased)
             {
-                if (timeTaken > countDown.maxTime)
+                if (timeTaken > oneStarTime)
                 {
                     return;
                 }
-                else if (timeTaken >= countDown.maxTime * 0.6f && timeTaken < countDown.maxTime && aquiredStars <= 1)
+                else if (timeTaken >= twoStarsTime && timeTaken < oneStarTime && acquiredStars <= 1)
                 {
-                    aquiredStars = 1;
+                    acquiredStars = 1;
                 }
-                else if (timeTaken >= countDown.maxTime * 0.4f && timeTaken < countDown.maxTime * 0.9f && aquiredStars <= 2)
+                else if (timeTaken >= threeStarsTime && timeTaken < twoStarsTime && acquiredStars <= 2)
                 {
-                    aquiredStars = 2;
+                    acquiredStars = 2;
                 }
-                else if (timeTaken < countDown.maxTime * 0.4f)
+                else if (timeTaken < threeStarsTime)
                 {
-                    aquiredStars = 3;
+                    acquiredStars = 3;
                 }
                 else return;
             }
             else if (isMoraleBased)
             {
-                if (cutnRun.morale <= 0) return;
-                else if (cutnRun.morale >= 1 && cutnRun.morale <= 35) aquiredStars = 1;
-                else if (cutnRun.morale > 35 && cutnRun.morale <= 85) aquiredStars = 2;
-                else if (cutnRun.morale > 85) aquiredStars = 3;
+                if (cutnRun.morale <= oneStarMorale) return;
+                else if (cutnRun.morale >= oneStarMorale && cutnRun.morale <= twoStarsMorale) acquiredStars = 1;
+                else if (cutnRun.morale > twoStarsMorale && cutnRun.morale <= threeStarsMorale) acquiredStars = 2;
+                else if (cutnRun.morale > threeStarsMorale) acquiredStars = 3;
                 else return;
             }
             else
@@ -317,7 +348,7 @@ public class GameOverSystem : MonoBehaviour
         else return;
     }
 
-    //Funzione che mostra il punteggio come contatore
+    //Function that shows the score raising like a counter
     private float ScoreCounter()
     {
         if (showedScore < player.playerScore)
@@ -328,6 +359,7 @@ public class GameOverSystem : MonoBehaviour
         return showedScore;
     }
 
+    // Function that check whether the level was won or lost
     private void CheckResult()
     {
         if (isMoraleBased)
@@ -349,6 +381,38 @@ public class GameOverSystem : MonoBehaviour
             Debug.LogError("The level type has not been assigned");
             return;
         }
+    }
 
+    //Function that checks the bonuses and add the appropriate rewards to the total
+    private void TotalReward()
+    {
+        totalReward += baseMoneyReward;
+        if (acquiredStars > 0) totalReward += (acquiredStars - preAcquiredStars) * starBonus + preAcquiredStars * (starBonus / 10);
+        //if (newBest) totalReward += bestScoreBonus;
+        if (firstTime) totalReward += firstTimeBonus;
+        //if (sideQuestAlreadyComplete) totalReward += sideQuestBonus / 10;
+        //else if (sideQuestComplete) totalReward += sideQuestBonus;
+    }
+
+    //Functions that checks whther was the first time the level was completed or not
+    private void CheckIfFirstTime()
+    {
+        if (isScoreBased)
+        {
+            if (gameMaster.bestScores[bestIndex] != 0) firstTime = false;
+        }
+        else if (isTimeBased)
+        {
+            if (gameMaster.bestTimes[bestIndex] != 0) firstTime = false;
+        }
+        else if (isMoraleBased)
+        {
+            if (gameMaster.bestMorales[bestIndex] != 0) firstTime = false;
+        }
+        else
+        {
+            Debug.LogError("The level type has not been assigned");
+            return;
+        }
     }
 }

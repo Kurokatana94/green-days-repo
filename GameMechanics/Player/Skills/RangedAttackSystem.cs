@@ -44,19 +44,9 @@ public class RangedAttackSystem : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetButtonDown("Skill") && !isActive && isReady)
+        if (Input.GetButtonDown("Skill"))
         {
-            isActive = true;
-            if (player.facingRight)
-            {
-                transform.parent.transform.eulerAngles = new Vector3(0, 0, 0);
-            }
-            else
-            {
-                transform.parent.transform.eulerAngles = new Vector3(0, 180, 0);
-            }
-            animator.SetTrigger("IsActivated");
-            frame.SetActive(true);
+            ActivateSkill();
         }
 
         if (isActive)
@@ -103,6 +93,24 @@ public class RangedAttackSystem : MonoBehaviour
                 plant.GetComponent<GoldenWeed>().GotHit();
                 audio.Play();
             }
+        }
+    }
+
+    public void ActivateSkill()
+    {
+        if (!isActive && isReady)
+        {
+            isActive = true;
+            if (player.facingRight)
+            {
+                transform.parent.transform.eulerAngles = new Vector3(0, 0, 0);
+            }
+            else
+            {
+                transform.parent.transform.eulerAngles = new Vector3(0, 180, 0);
+            }
+            animator.SetTrigger("IsActivated");
+            frame.SetActive(true);
         }
     }
 
