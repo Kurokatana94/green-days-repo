@@ -22,8 +22,8 @@ public class GameData
     public bool[] haveSkin = new bool[4];
     public bool[] skinActive = new bool[4];
 
-    public bool[] haveSkill = new bool[3];
-    public bool[] skillActive = new bool[3];
+    public bool[] haveSkill = new bool[4];
+    public bool[] skillActive = new bool[4];
 
     public GameData(GameMaster gameMaster)
     {
