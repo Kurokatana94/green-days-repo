@@ -37,8 +37,8 @@ public class GameMaster : MonoBehaviour
     //Items variables to check if acquired and activated
     public bool[] haveSkin = new bool[4];
     public bool[] skinActive = new bool[4];
-    public bool[] haveSkill = new bool[4];
-    public bool[] skillActive = new bool[4];
+    public bool[] haveSkill = new bool[6];
+    public bool[] skillActive = new bool[6];
 
     //Variables needed to keep track of the storyline and tutorial
     public bool firstTutorialCompleted;
