@@ -15,6 +15,7 @@ public class BladeSeedsSystem : MonoBehaviour
     public Vector3 spawnPoint;
     public Animator animator;
     private PlayerController player;
+    private WeedsSpawnSystem spawner;
 
     [Space]
     //Variables that defines how often the skill can be used
@@ -32,6 +33,7 @@ public class BladeSeedsSystem : MonoBehaviour
     private void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        spawner = GameObject.FindGameObjectWithTag("Spawner").GetComponent<WeedsSpawnSystem>();
     }
 
     private void Start()
@@ -70,6 +72,8 @@ public class BladeSeedsSystem : MonoBehaviour
                 isComplete = false;
             }
         }
+
+        CheckIfBouncing();
     }
 
     public void ActivateSkill()
@@ -88,6 +92,22 @@ public class BladeSeedsSystem : MonoBehaviour
             }
             animator.SetTrigger("IsActivated");
             frame.SetActive(true);
+        }
+    }
+
+    private void CheckIfBouncing()
+    {
+        if (transform.position.x >= spawner.maxX)
+        {
+            float newRot = transform.parent.eulerAngles.y + 180;
+            transform.parent.position = new Vector3((spawner.maxX - transform.parent.position.x) + spawner.maxX, transform.parent.position.y, 0);
+            transform.parent.eulerAngles = new Vector3(0, newRot, 0);
+        }
+        else if (transform.position.x <= spawner.minX)
+        {
+            float newRot = transform.parent.eulerAngles.y + 180;
+            transform.parent.position = new Vector3((spawner.minX - transform.parent.position.x) + spawner.minX, transform.parent.position.y, 0);
+            transform.parent.eulerAngles = new Vector3(0, newRot, 0);
         }
     }
 }

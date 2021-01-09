@@ -33,8 +33,10 @@ public class ShopSystem : MonoBehaviour
     public SpecialItem skill2 = new SpecialItem("Boomerang Blade", 5000, false);
     public SpecialItem skill3 = new SpecialItem("Tornado Blade", 10000, false);
     public SpecialItem skill4 = new SpecialItem("Blade Seeds", 7000, false);
+    public SpecialItem skill5 = new SpecialItem("Tulipa Seeds", 7000, false);
+    public SpecialItem skill6 = new SpecialItem("Green Thumb", 10000, false);
 
-    private SpecialItem[] skill = new SpecialItem[4];
+    private SpecialItem[] skill = new SpecialItem[6];
 
     //Ints needed to navigate throught the shops items
     private int skinN, skillN;
@@ -52,6 +54,8 @@ public class ShopSystem : MonoBehaviour
         skill[1] = skill2;
         skill[2] = skill3;
         skill[3] = skill4;
+        skill[4] = skill5;
+        skill[5] = skill6;
 
         skillButtons = new Button[skills.transform.childCount];
         skinButtons = new Button[skins.transform.childCount];
