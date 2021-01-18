@@ -6,7 +6,7 @@ public class TulipaSeedsSystem : MonoBehaviour
 {
     //General variables
     [Header("References")]
-    public GameObject tulipa;
+    public GameObject specialTulipa;
     public GameObject icon;
     public GameObject frame;
     public Transform seed;
@@ -65,7 +65,7 @@ public class TulipaSeedsSystem : MonoBehaviour
         {
             if (isComplete)
             {
-                Instantiate(tulipa, spawnPoint, Quaternion.identity);
+                Instantiate(specialTulipa, spawnPoint, Quaternion.identity);
                 isActive = false;
                 isReady = false;
                 tracker.enabled = true;

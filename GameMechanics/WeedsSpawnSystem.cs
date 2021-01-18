@@ -7,6 +7,7 @@ using GDTools;
 
 public class WeedsSpawnSystem : MonoBehaviour
 {
+    //List of all variables needed for the script with headers and tooltips to help to set everything in the inspector
     [Header ("Reference to Prefabs")]
     public GameObject evilWeed;
     public GameObject tulipa;

@@ -16,6 +16,7 @@ public class GameOverSystem : MonoBehaviour
     public PlayerController player;
     public GameObject nextLevel;
     public GameObject[] stars;
+    public GameObject rewardStars, rewardBest, rewardFirstTime, rewardSideQuest, reward;
 
     //Best score variables
     public GameObject crown;
@@ -394,11 +395,43 @@ public class GameOverSystem : MonoBehaviour
     private void TotalReward()
     {
         totalReward += baseMoneyReward;
-        if (acquiredStars > 0) totalReward += (acquiredStars - preAcquiredStars) * starBonus + preAcquiredStars * (starBonus / 10);
-        //if (newBest) totalReward += bestScoreBonus;
-        if (firstTime) totalReward += firstTimeBonus;
-        //if (sideQuestAlreadyComplete) totalReward += sideQuestBonus / 10;
-        //else if (sideQuestComplete) totalReward += sideQuestBonus;
+        if (acquiredStars > 0)
+        {
+            int starReward = (acquiredStars - preAcquiredStars) * starBonus + preAcquiredStars * (starBonus / 10);
+            totalReward += starReward;
+            rewardStars.SetActive(true);
+            rewardStars.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = starReward.ToString();
+            for (int i = 0; i < acquiredStars; i++)
+            {
+                rewardStars.transform.GetChild(i).gameObject.SetActive(true);
+            }
+        }
+        if (newBest)
+        {
+            totalReward += bestScoreBonus;
+            rewardBest.SetActive(true);
+            rewardBest.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = bestScoreBonus.ToString();
+        }
+        if (firstTime)
+        {
+            totalReward += firstTimeBonus;
+            rewardFirstTime.SetActive(true);
+            rewardFirstTime.transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().text = firstTimeBonus.ToString();
+        }
+        /*if (sideQuestAlreadyComplete)
+        {
+            totalReward += sideQuestBonus / 10;
+            rewardSideQuest.SetActive(true);
+            rewardSideQuest.transform.GetComponentInChildren<TextMeshProUGUI>().text = (sideQuestBonus/10).ToString();
+        }
+        else if (sideQuestComplete)
+        {
+            totalReward += sideQuestBonus;
+            rewardSideQuest.SetActive(true);
+            rewardSideQuest.transform.GetComponentInChildren<TextMeshProUGUI>().text = sideQuestBonus.ToString();
+        }*/
+
+        reward.GetComponentInChildren<TextMeshProUGUI>().text = totalReward.ToString();
     }
 
     //Functions that checks whther was the first time the level was completed or not

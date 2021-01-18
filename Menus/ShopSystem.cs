@@ -12,7 +12,10 @@ public class ShopSystem : MonoBehaviour
     public float currentExchangeRate;
     public Button[] skinButtons;
     public Button[] skillButtons;
+    public GameObject[] skinPreviews;
+    public GameObject[] skillPreviews;
     public GameObject skills, skins;
+    public GameObject skinPreviewsFolder, skillPreviewsFolder;
     public TextMeshProUGUI skinPrice, skillPrice;
 
     //Items list with 'name', 'cost' and 'starting quantity' as requirement
@@ -22,10 +25,11 @@ public class ShopSystem : MonoBehaviour
     //will be aquired at the start (skins)
     public SpecialItem basicSkin = new SpecialItem("Basic skin beff", 0, true);
     public SpecialItem skin1 = new SpecialItem("Old Beff", 20000, false);
-    public SpecialItem skin2 = new SpecialItem("Skin 2", 10000, false);
-    public SpecialItem skin3 = new SpecialItem("Skin 3", 10000, false);
+    public SpecialItem skin2 = new SpecialItem("Red Beff", 10000, false);
+    public SpecialItem skin3 = new SpecialItem("Christmas Beff", 25000, false);
+    public SpecialItem skin4 = new SpecialItem("Viking Beff", 15000, false);
 
-    private SpecialItem[] skin = new SpecialItem[4];
+    private SpecialItem[] skin = new SpecialItem[5];
 
     //Special items list with 'name', 'cost', and boolean to check if the item 
     //will be aquired at the start (skills)
@@ -38,7 +42,7 @@ public class ShopSystem : MonoBehaviour
 
     private SpecialItem[] skill = new SpecialItem[6];
 
-    //Ints needed to navigate throught the shops items
+    //Ints needed to navigate throught the shops items keeping track of the currently selected item
     private int skinN, skillN;
 
     private void Awake()
@@ -49,6 +53,7 @@ public class ShopSystem : MonoBehaviour
         skin[1] = skin1;
         skin[2] = skin2;
         skin[3] = skin3;
+        skin[4] = skin4;
 
         skill[0] = skill1;
         skill[1] = skill2;
@@ -59,6 +64,8 @@ public class ShopSystem : MonoBehaviour
 
         skillButtons = new Button[skills.transform.childCount];
         skinButtons = new Button[skins.transform.childCount];
+        skillPreviews = new GameObject[skillPreviewsFolder.transform.childCount];
+        skinPreviews = new GameObject[skinPreviewsFolder.transform.childCount];
     }
 
     private void Start()
@@ -68,6 +75,9 @@ public class ShopSystem : MonoBehaviour
 
         UpdateButtonArray(skills, skillButtons);
         UpdateButtonArray(skins, skinButtons);
+
+        UpdatePreviewArray(skillPreviewsFolder, skillPreviews);
+        UpdatePreviewArray(skinPreviewsFolder, skinPreviews);
 
         UpdateSelection(skillButtons[skillN]);
         UpdateSelection(skinButtons[skinN]);
@@ -103,6 +113,15 @@ public class ShopSystem : MonoBehaviour
         }
     }
 
+    private void UpdatePreviewArray(GameObject previewsType, GameObject[] list)
+    {
+        for (int i = 0; i < previewsType.transform.childCount; i++)
+        {
+            list[i] = previewsType.transform.GetChild(i).gameObject;
+            Debug.Log("Adding " + list[i] + " to previews list.");
+        }
+    }
+
     //Function used to update current selected item in the shop
     public void UpdateSelection(Button button)
     {
@@ -112,11 +131,16 @@ public class ShopSystem : MonoBehaviour
             {
                 skinN = i;
                 skinPrice.text = skin[skinN].cost.ToString();
+                skinPreviews[i - 1].SetActive(true);
                 if (gameMaster.haveSkin[skinN])
                 {
                     skinPrice.text = "Sold Out!";
                 }
                 Debug.Log("Updated price.");
+            }
+            else
+            {
+                skinPreviews[i - 1].SetActive(false);
             }
         }
 
@@ -126,11 +150,16 @@ public class ShopSystem : MonoBehaviour
             {
                 skillN = i;
                 skillPrice.text = skill[skillN].cost.ToString();
+                skillPreviews[skillN].SetActive(true);
                 if (gameMaster.haveSkill[skillN])
                 {
                     skillPrice.text = "Sold Out!";
                 }
                 Debug.Log("Updated price.");
+            }
+            else
+            {
+                skillPreviews[i].SetActive(false);
             }
         }
     }
