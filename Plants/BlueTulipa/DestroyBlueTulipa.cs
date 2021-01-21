@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class DestroySpecialTulipa : MonoBehaviour
+public class DestroyBlueTulipa : MonoBehaviour
 {
-    public SpecialTulipa specialTulipa;
+    public BlueTulipa specialTulipa;
     private WeedsSpawnSystem weeds;
 
     private void Awake()

@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SocialPlatforms.Impl;
 
-public class Tulipa : MonoBehaviour
+public class RedTulipa : MonoBehaviour
 {
     private WeedsSpawnSystem weeds;
     private PlayerController player;

@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class SlashSystem : MonoBehaviour
 {
+    //General variables
+    [Header("References")]
     public float slashRange;
     public Transform slashPoint;
     public Animator animator;
@@ -14,6 +16,7 @@ public class SlashSystem : MonoBehaviour
     public AudioSource audio;
 
     //Bool used to check if reset timer in cutter run mode
+    [HideInInspector]
     public bool hasHit;
 
     private void Update()
@@ -28,6 +31,7 @@ public class SlashSystem : MonoBehaviour
         }
     }
 
+    //Function that will check the area around the slashpoint to find targets and if found any, apply the damage
     private void Slash()
     {
         animator.SetTrigger("IsSlashing");
@@ -44,7 +48,7 @@ public class SlashSystem : MonoBehaviour
                 audio.Play();
             }else if (plant.CompareTag("Tulipa"))
             {
-                plant.GetComponent<Tulipa>().GotHit();
+                plant.GetComponent<RedTulipa>().GotHit();
                 audio.Play();
             }else if (plant.CompareTag("Bush"))
             {
@@ -63,9 +67,15 @@ public class SlashSystem : MonoBehaviour
                 plant.GetComponent<GoldenWeed>().GotHit();
                 audio.Play();
             }
+            else if (plant.CompareTag("SpecialTulipa"))
+            {
+                plant.GetComponent<BlueTulipa>().GotHit();
+                audio.Play();
+            }
         }
     }
 
+    //Small funciotn used to check the slash area in edit mode
     private void OnDrawGizmosSelected()
     {
         if (slashPoint == null) return;

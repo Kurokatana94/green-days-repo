@@ -70,7 +70,7 @@ public class RangedAttackSystem : MonoBehaviour
             }
             else if (plant.CompareTag("Tulipa"))
             {
-                plant.GetComponent<Tulipa>().GotHit();
+                plant.GetComponent<RedTulipa>().GotHit();
                 audio.Play();
             }
             else if (plant.CompareTag("Bush"))
@@ -91,6 +91,11 @@ public class RangedAttackSystem : MonoBehaviour
             else if (plant.CompareTag("Gold"))
             {
                 plant.GetComponent<GoldenWeed>().GotHit();
+                audio.Play();
+            }
+            else if (plant.CompareTag("SpecialTulipa"))
+            {
+                plant.GetComponent<BlueTulipa>().GotHit();
                 audio.Play();
             }
         }

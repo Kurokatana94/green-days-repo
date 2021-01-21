@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TulipaSeedsSystem : MonoBehaviour
+public class BlueTulipaSeedsSystem : MonoBehaviour
 {
     //General variables
     [Header("References")]
@@ -91,6 +91,7 @@ public class TulipaSeedsSystem : MonoBehaviour
                 transform.parent.transform.eulerAngles = new Vector3(0, 180, 0);
             }
             animator.SetTrigger("IsActivated");
+            player.animator.SetTrigger("IsThrowing");
             frame.SetActive(true);
         }
     }

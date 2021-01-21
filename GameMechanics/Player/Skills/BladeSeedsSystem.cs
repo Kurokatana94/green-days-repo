@@ -91,6 +91,7 @@ public class BladeSeedsSystem : MonoBehaviour
                 transform.parent.transform.eulerAngles = new Vector3(0, 180, 0);
             }
             animator.SetTrigger("IsActivated");
+            player.animator.SetTrigger("IsThrowing");
             frame.SetActive(true);
         }
     }

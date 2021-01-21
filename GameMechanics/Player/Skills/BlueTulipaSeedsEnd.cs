@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations;
 
-public class TulipaSeedsEnd : StateMachineBehaviour
+public class BlueTulipaSeedsEnd : StateMachineBehaviour
 {
-    private TulipaSeedsSystem seeds;
+    private BlueTulipaSeedsSystem seeds;
 
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        seeds = GameObject.FindGameObjectWithTag("Skill").GetComponent<TulipaSeedsSystem>();        
+        seeds = GameObject.FindGameObjectWithTag("Skill").GetComponent<BlueTulipaSeedsSystem>();        
     }
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

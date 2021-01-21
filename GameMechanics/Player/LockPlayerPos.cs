@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SlashEnd : StateMachineBehaviour
+public class LockPlayerPos : StateMachineBehaviour
 {
     private PlayerController player;
     private Rigidbody2D rb;

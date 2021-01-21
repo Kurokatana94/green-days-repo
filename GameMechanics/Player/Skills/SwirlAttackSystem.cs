@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class SwirlAttackSystem : MonoBehaviour
 {
+    //Genereal variables
+    [Header("References")]
     public Transform skillPoint;
     public Animator animator;
     public LayerMask plantLayers;
@@ -11,8 +13,13 @@ public class SwirlAttackSystem : MonoBehaviour
     public GameObject icon;
     public GameObject frame;
     private PlayerController player;
+
+    [Space]
+    [Tooltip("Area range around the swirling axe where plants would be hit or not")]
     public float skillRange;
+    [Tooltip("Cooldown of the skill in seconds")]
     public float skillCD;
+    [HideInInspector]
     public double skillCDTimer;
 
 
@@ -70,7 +77,7 @@ public class SwirlAttackSystem : MonoBehaviour
             }
             else if (plant.CompareTag("Tulipa"))
             {
-                plant.GetComponent<Tulipa>().GotHit();
+                plant.GetComponent<RedTulipa>().GotHit();
                 audio.Play();
             }
             else if (plant.CompareTag("Bush"))
@@ -91,6 +98,11 @@ public class SwirlAttackSystem : MonoBehaviour
             else if (plant.CompareTag("Gold"))
             {
                 plant.GetComponent<GoldenWeed>().GotHit();
+                audio.Play();
+            }
+            else if (plant.CompareTag("SpecialTulipa"))
+            {
+                plant.GetComponent<BlueTulipa>().GotHit();
                 audio.Play();
             }
         }

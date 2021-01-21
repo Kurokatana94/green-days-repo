@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TulipaAnimUpdate : StateMachineBehaviour
+public class RedTulipaAnimUpdate : StateMachineBehaviour
 {
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        animator.gameObject.GetComponent<Tulipa>().cycleEnded = true;
+        animator.gameObject.GetComponent<RedTulipa>().cycleEnded = true;
     }
 }

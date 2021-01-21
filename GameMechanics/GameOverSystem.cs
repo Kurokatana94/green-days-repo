@@ -72,7 +72,7 @@ public class GameOverSystem : MonoBehaviour
     [Header("Score-based settings")]
     [Tooltip("Required score to achieve before time ends to win the match")]
     public int requiredScore;
-    private float showedScore = 0f;
+    private float showedReward = 0f;
     private float counterSpeed = .8f;
     [Tooltip("Minimum amount of points required to acquire each star")]
     public int oneStarScore, twoStarsScore, threeStarsScore;
@@ -136,7 +136,6 @@ public class GameOverSystem : MonoBehaviour
                 }
                 data.AutoSaveGame();
                 player.plantsKilled = 0;
-                isUpdated = true;
                 if (newBest) crown.SetActive(true);
             }
             else TryAgain();
@@ -159,6 +158,8 @@ public class GameOverSystem : MonoBehaviour
         Time.timeScale = 0f;
 
         StarEvaluation();
+
+        ShowReward();
 
         if (isScoreBased)
         {
@@ -245,52 +246,56 @@ public class GameOverSystem : MonoBehaviour
             TotalReward();
 
             gameMaster.totalMoney += totalReward;
+
+            isUpdated = true;
+        }
+    }
+
+    private void ShowReward()
+    {
+        UpdateGameMaster();
+
+        reward.GetComponentInChildren<TextMeshProUGUI>().text = RewardCounter().ToString("0");
+
+        if (isLastLevel)
+        {
+            nextLevel.SetActive(false);
+
+            reward.GetComponentInChildren<TextMeshProUGUI>().text = RewardCounter().ToString("0");
         }
     }
 
     //Show the score and best score
     private void ShowScore()
     {
-        UpdateGameMaster();
-
-        score.text = ScoreCounter().ToString("0");
+        score.text = player.playerScore.ToString("0");
             
         if (isLastLevel)
         {
-            nextLevel.SetActive(false);
-                        
-            score.text = ScoreCounter().ToString("0");            
+            nextLevel.SetActive(false);     
         }
     }
 
     //Show the time and best time
     private void ShowTime()
-    {
-        UpdateGameMaster();
-        
+    {        
         score.text = timeTaken.ToString("F2") + "s";
         
 
         if (isLastLevel)
         {
             nextLevel.SetActive(false);
-
-            score.text = timeTaken.ToString("F2") + "s";
         }
     }
 
     //Shows morale and best morale
     private void ShowMorale()
-    {
-        UpdateGameMaster();
-                
+    {                
         score.text = cutnRun.morale.ToString() + "%";
 
         if (isLastLevel)
         {
             nextLevel.SetActive(false);
-            
-            score.text = cutnRun.morale.ToString() + "%";            
         }
     }
 
@@ -357,14 +362,14 @@ public class GameOverSystem : MonoBehaviour
     }
 
     //Function that shows the score raising like a counter
-    private float ScoreCounter()
+    private float RewardCounter()
     {
-        if (showedScore < player.playerScore)
+        if (showedReward < totalReward)
         {
-            showedScore += (counterSpeed * Time.unscaledDeltaTime) * player.playerScore;
-            if (showedScore >= player.playerScore) showedScore = player.playerScore;
+            showedReward += (counterSpeed * Time.unscaledDeltaTime) * totalReward;
+            if (showedReward >= totalReward) showedReward = totalReward;
         }
-        return showedScore;
+        return showedReward;
     }
 
     // Function that check whether the level was won or lost
@@ -430,8 +435,6 @@ public class GameOverSystem : MonoBehaviour
             rewardSideQuest.SetActive(true);
             rewardSideQuest.transform.GetComponentInChildren<TextMeshProUGUI>().text = sideQuestBonus.ToString();
         }*/
-
-        reward.GetComponentInChildren<TextMeshProUGUI>().text = totalReward.ToString();
     }
 
     //Functions that checks whther was the first time the level was completed or not

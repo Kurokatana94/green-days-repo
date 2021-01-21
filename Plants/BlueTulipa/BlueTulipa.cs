@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SocialPlatforms.Impl;
 
-public class SpecialTulipa : MonoBehaviour
+public class BlueTulipa : MonoBehaviour
 {
     [Header("References")]
     private WeedsSpawnSystem weeds;
@@ -131,9 +131,16 @@ public class SpecialTulipa : MonoBehaviour
     {
         Collider2D[] plants = Physics2D.OverlapCircleAll(gameObject.transform.GetChild(0).transform.position, shyRange, plantLayer);
 
-        if (plants.Length > shyLimit) isShy = true;
-        else isShy = false;
-
+        if (plants.Length > shyLimit)
+        {
+            isShy = true;
+            animator.SetBool("IsShy", true);
+        }
+        else
+        {
+            isShy = false;
+            animator.SetBool("IsShy", false);
+        }
         Debug.Log("There are " + plants.Length + " plants in the area.");
     }
 
