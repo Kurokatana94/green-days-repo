@@ -8,6 +8,7 @@ public class ClipFixer : MonoBehaviour
     [Header("References")]
     [Tooltip("Transform to consider as the center of the anti-clip area")]
     public Transform areaCenter;
+    public LayerMask layerMask;
     [Space]
     [Tooltip("Range of the area to check for clip fixing")]
     public float areaRange;
@@ -19,17 +20,17 @@ public class ClipFixer : MonoBehaviour
 
     private void CheckIfClipping()
     {
-        Collider2D[] items = Physics2D.OverlapCircleAll(areaCenter.position, areaRange);
+        Collider2D[] items = Physics2D.OverlapCircleAll(areaCenter.position, areaRange, layerMask);
 
         foreach(Collider2D item in items)
         {
             if(item.gameObject != gameObject)
             {
-                if(item.transform.position.y > areaCenter.position.y && item.GetComponent<SpriteRenderer>().sortingOrder >= gameObject.GetComponent<SpriteRenderer>().sortingOrder)
+                if(item.transform.position.y + item.transform.GetChild(0).transform.position.y > gameObject.transform.position.y + areaCenter.position.y && item.GetComponent<SpriteRenderer>().sortingOrder >= gameObject.GetComponent<SpriteRenderer>().sortingOrder)
                 {
                     item.GetComponent<SpriteRenderer>().sortingOrder = gameObject.GetComponent<SpriteRenderer>().sortingOrder - 1;
                 }
-                else if(item.transform.position.y < areaCenter.position.y && item.GetComponent<SpriteRenderer>().sortingOrder <= gameObject.GetComponent<SpriteRenderer>().sortingOrder)
+                else if(item.transform.position.y + item.transform.GetChild(0).transform.position.y < gameObject.transform.position.y + areaCenter.position.y && item.GetComponent<SpriteRenderer>().sortingOrder <= gameObject.GetComponent<SpriteRenderer>().sortingOrder)
                 {
                     item.GetComponent<SpriteRenderer>().sortingOrder = gameObject.GetComponent<SpriteRenderer>().sortingOrder + 1;
                 }

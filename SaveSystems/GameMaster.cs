@@ -35,8 +35,8 @@ public class GameMaster : MonoBehaviour
     public int acquiredStars;
 
     //Items variables to check if acquired and activated
-    public bool[] haveSkin = new bool[4];
-    public bool[] skinActive = new bool[4];
+    public bool[] haveSkin = new bool[6];
+    public bool[] skinActive = new bool[6];
     public bool[] haveSkill = new bool[6];
     public bool[] skillActive = new bool[6];
 

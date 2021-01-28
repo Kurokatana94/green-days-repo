@@ -17,6 +17,7 @@ public class GameOverSystem : MonoBehaviour
     public GameObject nextLevel;
     public GameObject[] stars;
     public GameObject rewardStars, rewardBest, rewardFirstTime, rewardSideQuest, reward;
+    private LevelLoader loader;
 
     //Best score variables
     public GameObject crown;
@@ -105,6 +106,7 @@ public class GameOverSystem : MonoBehaviour
     private void Awake()
     {
         gameMaster = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMaster>();
+        loader = GameObject.FindGameObjectWithTag("Loader").GetComponent<LevelLoader>();
     }
 
     private void Start()
@@ -146,8 +148,9 @@ public class GameOverSystem : MonoBehaviour
     public void GameStart()
     {        
         Time.timeScale = 1f;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        loader.LoadLevel(SceneManager.GetActiveScene().buildIndex + 1);
         gameOver = false;
+        gameObject.SetActive(false);
     }
 
     //End the level showing up the gameover window

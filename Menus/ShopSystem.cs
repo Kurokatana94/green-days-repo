@@ -28,8 +28,9 @@ public class ShopSystem : MonoBehaviour
     public SpecialItem skin2 = new SpecialItem("Red Beff", 10000, false);
     public SpecialItem skin3 = new SpecialItem("Christmas Beff", 25000, false);
     public SpecialItem skin4 = new SpecialItem("Viking Beff", 15000, false);
+    public SpecialItem skin5 = new SpecialItem("Skin", 10000, false);
 
-    private SpecialItem[] skin = new SpecialItem[5];
+    private SpecialItem[] skin = new SpecialItem[6];
 
     //Special items list with 'name', 'cost', and boolean to check if the item 
     //will be aquired at the start (skills)
@@ -54,6 +55,7 @@ public class ShopSystem : MonoBehaviour
         skin[2] = skin2;
         skin[3] = skin3;
         skin[4] = skin4;
+        skin[5] = skin5;
 
         skill[0] = skill1;
         skill[1] = skill2;
@@ -79,9 +81,6 @@ public class ShopSystem : MonoBehaviour
         UpdatePreviewArray(skillPreviewsFolder, skillPreviews);
         UpdatePreviewArray(skinPreviewsFolder, skinPreviews);
 
-        UpdateSelection(skillButtons[skillN]);
-        UpdateSelection(skinButtons[skinN]);
-
         for (int i = 1; i <= skinButtons.Length; i++)
         {
             skinButtons[i - 1].transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = skin[i].name;
@@ -94,7 +93,7 @@ public class ShopSystem : MonoBehaviour
 
         for (int i = 0; i < skillButtons.Length; i++)
         {
-            skillButtons[i].transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = skill[i].name;
+            skillButtons[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = skill[i].name;
             Debug.Log("Updated "+ skillButtons[i]+" name to " + skill[i].name);
             if (gameMaster.haveSkill[i])
             {
@@ -159,6 +158,8 @@ public class ShopSystem : MonoBehaviour
             }
             else
             {
+                skillPreviews[i].transform.GetChild(0).gameObject.SetActive(false);
+                skillPreviews[i].transform.GetChild(1).gameObject.SetActive(false);
                 skillPreviews[i].SetActive(false);
             }
         }

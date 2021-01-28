@@ -23,7 +23,7 @@ public class BladeWeed : MonoBehaviour
     {
         if (health <= 0)
         {
-            transform.GetChild(0).gameObject.SetActive(true);
+            transform.GetChild(1).gameObject.SetActive(true);
             weeds.bladeCounter -= 1;
             animator.SetTrigger("IsDead");
             isDead = true;

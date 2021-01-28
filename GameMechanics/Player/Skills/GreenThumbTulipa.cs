@@ -55,8 +55,8 @@ public class GreenThumbTulipa : MonoBehaviour
                 audio.Play();
             }else if (plant.CompareTag("Tulipa"))
             {
-                int n = 1;
-                if (Random.Range(0, 1) != n)
+                int n = Random.Range(1, 100);
+                if (n < 50)
                 {
                     plant.GetComponent<RedTulipa>().GotHit();
                     audio.Play();
@@ -80,8 +80,8 @@ public class GreenThumbTulipa : MonoBehaviour
             }
             else if (plant.CompareTag("SpecialTulipa"))
             {
-                int n = 1;
-                if (Random.Range(0, 1) != n)
+                int n = Random.Range(1, 100);
+                if (n < 50)
                 {
                     plant.GetComponent<BlueTulipa>().GotHit();
                     audio.Play();
