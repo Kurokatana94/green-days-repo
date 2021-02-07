@@ -28,7 +28,7 @@ public class ShopSystem : MonoBehaviour
     public SpecialItem skin2 = new SpecialItem("Red Beff", 10000, false);
     public SpecialItem skin3 = new SpecialItem("Christmas Beff", 25000, false);
     public SpecialItem skin4 = new SpecialItem("Viking Beff", 15000, false);
-    public SpecialItem skin5 = new SpecialItem("Skin", 10000, false);
+    public SpecialItem skin5 = new SpecialItem("Blue Beff", 5000, false);
 
     private SpecialItem[] skin = new SpecialItem[6];
 

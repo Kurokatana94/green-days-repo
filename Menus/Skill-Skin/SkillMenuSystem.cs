@@ -7,6 +7,8 @@ public class SkillMenuSystem : MonoBehaviour
 {
     private GameMaster gameMaster;
     public GameObject[] skillButtons;
+    public GameObject buttonFolder;
+
 
     private void Awake()
     {
@@ -15,6 +17,10 @@ public class SkillMenuSystem : MonoBehaviour
 
     private void Start()
     {
+        skillButtons = new GameObject[buttonFolder.transform.childCount];
+
+        UpdateButtonArray();
+
         for (int i = 0; i < skillButtons.Length; i++)
         {
             if (gameMaster.haveSkill[i])
@@ -31,6 +37,14 @@ public class SkillMenuSystem : MonoBehaviour
         {
             if (i == button) gameMaster.skillActive[i] = true;
             else gameMaster.skillActive[i] = false;
+        }
+    }
+
+    private void UpdateButtonArray()
+    {
+        for (int i = 0; i < buttonFolder.transform.childCount; i++)
+        {
+            skillButtons[i] = buttonFolder.transform.GetChild(i).gameObject;
         }
     }
 }

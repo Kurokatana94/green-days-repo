@@ -41,7 +41,7 @@ public class GameMaster : MonoBehaviour
     public bool[] skillActive = new bool[6];
 
     //Variables needed to keep track of the storyline and tutorial
-    public bool firstTutorialCompleted;
+    public bool[] tutorial = new bool[1];
 
     private void Awake()
     {
