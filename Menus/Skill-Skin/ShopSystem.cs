@@ -17,6 +17,7 @@ public class ShopSystem : MonoBehaviour
     public GameObject skills, skins;
     public GameObject skinPreviewsFolder, skillPreviewsFolder;
     public TextMeshProUGUI skinPrice, skillPrice;
+    public Animator closet;
 
     //Items list with 'name', 'cost' and 'starting quantity' as requirement
     public Item item = new Item("Sample Item 750", 500, 0);
@@ -30,7 +31,8 @@ public class ShopSystem : MonoBehaviour
     public SpecialItem skin4 = new SpecialItem("Viking Beff", 15000, false);
     public SpecialItem skin5 = new SpecialItem("Blue Beff", 5000, false);
 
-    private SpecialItem[] skin = new SpecialItem[6];
+    [HideInInspector]
+    public SpecialItem[] skin = new SpecialItem[6];
 
     //Special items list with 'name', 'cost', and boolean to check if the item 
     //will be aquired at the start (skills)
@@ -44,7 +46,10 @@ public class ShopSystem : MonoBehaviour
     private SpecialItem[] skill = new SpecialItem[6];
 
     //Ints needed to navigate throught the shops items keeping track of the currently selected item
-    private int skinN, skillN;
+    private int skillN;
+    [HideInInspector]
+    public int skinN;
+    private bool closetWasOpen = false;
 
     private void Awake()
     {
@@ -124,24 +129,41 @@ public class ShopSystem : MonoBehaviour
     //Function used to update current selected item in the shop
     public void UpdateSelection(Button button)
     {
-        for (int i = 1; i <= skinButtons.Length; i++)
+        if (!closetWasOpen)
         {
-            if(skinButtons[i-1] == button)
+            for (int i = 1; i <= skinButtons.Length; i++)
             {
-                skinN = i;
-                skinPrice.text = skin[skinN].cost.ToString();
-                skinPreviews[i - 1].SetActive(true);
-                if (gameMaster.haveSkin[skinN])
+                if (skinButtons[i - 1] == button)
                 {
-                    skinPrice.text = "Sold Out!";
+                    skinN = i;
+                    closet.SetTrigger("Open");
+                    skinPrice.text = skin[skinN].cost.ToString();
+                    skinPreviews[skinN - 1].SetActive(true);
+                    if (gameMaster.haveSkin[skinN])
+                    {
+                        skinPrice.text = "Sold Out!";
+                    }
+                    Debug.Log("Updated price.");
                 }
-                Debug.Log("Updated price.");
+                else
+                {
+                    skinPreviews[i - 1].SetActive(false);
+                }
             }
-            else
+            closetWasOpen = true;
+        }
+        else
+        {
+            for (int i = 1; i <= skinButtons.Length; i++)
             {
-                skinPreviews[i - 1].SetActive(false);
+                if(skinButtons[i-1] == button)
+                {
+                    skinN = i;
+                    closet.SetTrigger("Closed Shop");
+                }
             }
         }
+
 
         for (int i = 0; i < skillButtons.Length; i++)
         {

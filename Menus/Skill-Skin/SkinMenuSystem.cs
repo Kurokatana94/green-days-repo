@@ -7,6 +7,13 @@ public class SkinMenuSystem : MonoBehaviour
 {
     private GameMaster gameMaster;
     public Button[] skinButtons;
+    public GameObject buttonFolder;
+    public GameObject skinPreview;
+    public GameObject[] skinPreviews;
+    public Animator closet;
+
+    private bool wasOpen = false;
+    public int selectedSkin;
 
     private void Awake()
     {
@@ -15,6 +22,9 @@ public class SkinMenuSystem : MonoBehaviour
 
     private void Start()
     {
+        UpdatePreviewArray();
+        UpdateButtonArray();
+
         for (int i = 0; i < skinButtons.Length; i++)
         {
             if (gameMaster.haveSkin[i]) skinButtons[i].interactable = true;
@@ -23,10 +33,47 @@ public class SkinMenuSystem : MonoBehaviour
 
     public void SkinButton(int button)
     {
-        for (int i = 0; i < gameMaster.skinActive.Length; i++)
+        selectedSkin = button;
+
+        if (!wasOpen)
         {
-            if (i == button) gameMaster.skinActive[i] = true;
-            else gameMaster.skinActive[i] = false;
+            closet.SetTrigger("Open");
+            wasOpen = true;
+            for (int i = 0; i < gameMaster.skinActive.Length; i++)
+            {
+                if (i == button)
+                {
+                    gameMaster.skinActive[i] = true;
+                    skinPreviews[i].SetActive(true);
+                }
+                else
+                {
+                    gameMaster.skinActive[i] = false;
+                    skinPreviews[i].SetActive(false);
+                }
+            }
+        }
+        else
+        {
+            closet.SetTrigger("Closed Selection");
+        }
+    }
+
+    private void UpdatePreviewArray()
+    {
+        skinPreviews = new GameObject[skinPreview.transform.childCount];
+        for (int i = 0; i < skinPreview.transform.childCount; i++)
+        {
+            skinPreviews[i] = skinPreview.transform.GetChild(i).gameObject;
+        }
+    }
+
+    private void UpdateButtonArray()
+    {
+        skinButtons = new Button[buttonFolder.transform.childCount];
+        for (int i = 0; i < buttonFolder.transform.childCount; i++)
+        {
+            skinButtons[i] = buttonFolder.transform.GetChild(i).gameObject.GetComponent<Button>();
         }
     }
 }
