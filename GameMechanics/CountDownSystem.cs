@@ -6,11 +6,12 @@ public class CountDownSystem : MonoBehaviour
 {
     public double maxTime;
     public double timeLeft;
-    public GameOverSystem gameOverSystem;
+    private GameOverSystem gameOver;
     public AudioSource weeds;
 
     private void Awake()
     {
+        gameOver = GameObject.FindGameObjectWithTag("GO").GetComponent<GameOverSystem>();
         weeds.mute = true;
         timeLeft = maxTime;
     }
@@ -23,7 +24,7 @@ public class CountDownSystem : MonoBehaviour
         }
         else if(timeLeft <= 0f)
         {
-            gameOverSystem.gameOver = true;
+            gameOver.gameOver = true;
             Debug.Log("Fine Partita");
         }
     }

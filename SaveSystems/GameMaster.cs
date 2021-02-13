@@ -22,7 +22,7 @@ public class GameMaster : MonoBehaviour
     // GameData variables to store
     public int totalPoints;
     public int totalMoney;
-    public int totalStars = 9;
+    public int totalStars = 20;
     public List<double> bestTimes = new List<double>();
     public List<int> bestScores = new List<int>();
     public List<int> bestMorales = new List<int>();
@@ -41,7 +41,7 @@ public class GameMaster : MonoBehaviour
     public bool[] skillActive = new bool[6];
 
     //Variables needed to keep track of the storyline and tutorial
-    public bool[] tutorial = new bool[1];
+    public bool[] tutorial = new bool[10];
 
     private void Awake()
     {

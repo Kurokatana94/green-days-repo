@@ -8,6 +8,7 @@ using GDTools;
 public class WeedsSpawnSystem : MonoBehaviour
 {
     //List of all variables needed for the script with headers and tooltips to help to set everything in the inspector
+    private GameOverSystem gameOver;
     [Header ("Reference to Prefabs")]
     public GameObject evilWeed;
     public GameObject tulipa;
@@ -93,6 +94,12 @@ public class WeedsSpawnSystem : MonoBehaviour
     public int maxTulipaCounter;
     [Tooltip("CoolDown before next spawn")]
     public float tulipaGrowCD;
+    [Tooltip("Amount of time removed from grow CoolDown duration at each spawn")]
+    public float tulipaGrowSpeedModifier;
+    [Tooltip("Cap set for fastest spawn CoolDown")]
+    public float fastestTulipaGrowSpeed;
+    [Tooltip("Preset quantity that spawn at the start of each game")]
+    public int tulipaStartQuantity;
 
     //Bools that gives the ok whenever a plant should spawn
     private bool 
@@ -104,25 +111,35 @@ public class WeedsSpawnSystem : MonoBehaviour
         evilGrowCDTimer, tulipaGrowCDTimer, bushGrowCDTimer,
         greenGrowCDTimer, goldGrowCDTimer, bladeGrowCDTimer;
 
-    //Ints used to determine with what quantity of each plant the game start
+    [Header("Spawn area limits")]
+    public float minX = -5.92f;
+    public float maxX = 5.89f;
+    public float minY = -3.6f;
+    public float maxY = 2.45f;
 
-    public GameOverSystem gameOver;
-
-    public float minX = -5.92f, maxX = 5.89f, minY = -3.6f, maxY = 2.45f;
 
     //Spawn methods variables --------
-
     public Collider2D[] colliders;
+    [Tooltip("Max radius for the plants to check if able to spawn or not by checking if the area is already occupied")]
     public float radius;
+    [Tooltip("List of all items currently spawned on the game area")]
     public List<Vector3> occupiedSpawnPos;
 
     private void Awake()
     {
+        gameOver = GameObject.FindGameObjectWithTag("GO").GetComponent<GameOverSystem>();
         occupiedSpawnPos = new List<Vector3>();    
     }
 
     private void Start()
     {
+        evilGrowCDTimer = evilWeedGrowCD;
+        bladeGrowCDTimer = bladeGrowCD;
+        tulipaGrowCDTimer = tulipaGrowCD;
+        bushGrowCDTimer = bushGrowCD;
+        greenGrowCDTimer = greenGrowCD;
+        goldGrowCDTimer = goldGrowCD;
+
         for (int i = 0; i < evilStartQuantity; i++)
         {
             //SpawnPlant(weed);
@@ -224,11 +241,11 @@ public class WeedsSpawnSystem : MonoBehaviour
             //SpawnPlant(weed);
             SpawnEvilWeed();
             evilWeedGrowCD -= evilWeedGrowSpeedModifier;
-                if (evilWeedGrowCD <= fastestEvilWeedGrowSpeed)
-                {
-                    evilWeedGrowCD = fastestEvilWeedGrowSpeed;
-                    evilWeedGrowSpeedModifier = 0;
-                }
+            if (evilWeedGrowCD <= fastestEvilWeedGrowSpeed)
+            {
+                evilWeedGrowCD = fastestEvilWeedGrowSpeed;
+                evilWeedGrowSpeedModifier = 0;
+            }
         }
 
         if (bushCounter < maxBushCounter && bushCanGrow)
@@ -236,28 +253,35 @@ public class WeedsSpawnSystem : MonoBehaviour
             //SpawnPlant(bush);
             SpawnBush();
             bushGrowCD -= bushGrowSpeedModifier;
-                if (bushGrowCD <= fastestBushGrowSpeed)
-                {
-                    bushGrowCD = fastestBushGrowSpeed;
-                    bushGrowSpeedModifier = 0;
-                }
+            if (bushGrowCD <= fastestBushGrowSpeed)
+            {
+                bushGrowCD = fastestBushGrowSpeed;
+                bushGrowSpeedModifier = 0;
+            }
         }
 
         if (tulipaCounter < maxTulipaCounter && tulipaCanGrow)
         {
             //SpawnPlant(tulipa);
             SpawnTulipa();
+            tulipaGrowCD -= tulipaGrowSpeedModifier;
+            if(tulipaGrowCD <= fastestTulipaGrowSpeed)
+            {
+                tulipaGrowCD = fastestTulipaGrowSpeed;
+                tulipaGrowSpeedModifier = 0;
+            }
+
         }
 
         if(greenCounter < maxGreenWeedCounter && greenCanGrow)
         {
             SpawnGreenWeed();
             greenGrowCD -= greenGrowSpeedModifier;
-                if (greenGrowCD <= fastestGreenGrowSpeed)
-                {
-                    greenGrowCD = fastestGreenGrowSpeed;
-                    greenGrowSpeedModifier = 0;
-                }
+            if (greenGrowCD <= fastestGreenGrowSpeed)
+            {
+                greenGrowCD = fastestGreenGrowSpeed;
+                greenGrowSpeedModifier = 0;
+            }
         }
 
         if(bladeCounter < maxBladeWeedConter && bladeCanGrow)

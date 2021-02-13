@@ -17,6 +17,7 @@ public class ShopSystem : MonoBehaviour
     public GameObject skills, skins;
     public GameObject skinPreviewsFolder, skillPreviewsFolder;
     public TextMeshProUGUI skinPrice, skillPrice;
+    private string skinPriceDefault, skillPriceDefault;
     public Animator closet;
 
     //Items list with 'name', 'cost' and 'starting quantity' as requirement
@@ -77,6 +78,9 @@ public class ShopSystem : MonoBehaviour
 
     private void Start()
     {
+        skillPriceDefault = skillPrice.text;
+        skinPriceDefault = skinPrice.text;
+
         skinN = 0;
         skillN = 0;
 
@@ -129,6 +133,7 @@ public class ShopSystem : MonoBehaviour
     //Function used to update current selected item in the shop
     public void UpdateSelection(Button button)
     {
+
         if (!closetWasOpen)
         {
             for (int i = 1; i <= skinButtons.Length; i++)
@@ -169,6 +174,7 @@ public class ShopSystem : MonoBehaviour
         {
             if(skillButtons[i] == button)
             {
+                skillPreviewsFolder.GetComponent<Image>().enabled = false;
                 skillN = i;
                 skillPrice.text = skill[skillN].cost.ToString();
                 skillPreviews[skillN].SetActive(true);
@@ -184,6 +190,16 @@ public class ShopSystem : MonoBehaviour
                 skillPreviews[i].transform.GetChild(1).gameObject.SetActive(false);
                 skillPreviews[i].SetActive(false);
             }
+        }
+    }
+
+    public void ExitSkillShop()
+    {
+        skillPreviewsFolder.GetComponent<Image>().enabled = true;
+        skillPrice.text = skillPriceDefault;
+        for (int i = 0; i < skillButtons.Length; i++)
+        {
+            skillPreviews[i].SetActive(false);
         }
     }
 
@@ -204,7 +220,7 @@ public class ShopSystem : MonoBehaviour
         BuyOnce(skill[skillN]);
         if (skill[skillN].isAquired)
         {
-            gameMaster.haveSkill[skillN-1] = true;
+            gameMaster.haveSkill[skillN] = true;
             skillButtons[skillN].interactable = false;
             skillPrice.text = "Sold Out!";
         }

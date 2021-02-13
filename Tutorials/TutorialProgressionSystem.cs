@@ -16,9 +16,12 @@ public class TutorialProgressionSystem : MonoBehaviour
 
     private void Start()
     {
+        Time.timeScale = 0;
+
         if (gameMaster.tutorial[tutorialNumber])
         {
             gameObject.SetActive(false);
+            Time.timeScale = 1;
         }
         else
         {
@@ -32,6 +35,7 @@ public class TutorialProgressionSystem : MonoBehaviour
         if (pageNumber >= gameObject.transform.childCount)
         {
             gameMaster.tutorial[tutorialNumber] = true;
+            Time.timeScale = 1;
             gameObject.SetActive(false);
         }
         else

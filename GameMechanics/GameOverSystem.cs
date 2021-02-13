@@ -28,7 +28,7 @@ public class GameOverSystem : MonoBehaviour
     private bool isSuccessful; 
 
     //Data management variables
-    public DataManagementSystem data;
+    private DataManagementSystem data;
     private GameMaster gameMaster;
     private int bestIndex;
     private bool isUpdated = false;
@@ -105,6 +105,7 @@ public class GameOverSystem : MonoBehaviour
 
     private void Awake()
     {
+        data = GameObject.FindGameObjectWithTag("Data").GetComponent<DataManagementSystem>();
         gameMaster = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMaster>();
         loader = GameObject.FindGameObjectWithTag("Loader").GetComponent<LevelLoader>();
     }
@@ -130,7 +131,10 @@ public class GameOverSystem : MonoBehaviour
             CheckResult();
             if (isSuccessful)
             {
-                timeTaken = countDown.maxTime - countDown.timeLeft;
+                if (isTimeBased)
+                {
+                    timeTaken = countDown.maxTime - countDown.timeLeft;
+                }
                 GameOver();
                 for (int i = 0; i < acquiredStars; i++)
                 {
@@ -217,27 +221,33 @@ public class GameOverSystem : MonoBehaviour
     {
         if (!isUpdated)
         {
-            if (isTimeBased) player.playerScore = (int)(countDown.timeLeft * pointConvertModifier);
-
-            if (isMoraleBased) player.playerScore = cutnRun.morale * 100;
-
-
-            if (gameMaster.bestScores[bestIndex] < player.playerScore)
+            if (isScoreBased)
             {
-                gameMaster.bestScores[bestIndex] = player.playerScore;
-                newBest = true;
+                if (gameMaster.bestScores[bestIndex] < player.playerScore)
+                {
+                    gameMaster.bestScores[bestIndex] = player.playerScore;
+                    newBest = true;
+                }
             }
 
-            if (gameMaster.bestTimes[bestIndex] > timeTaken || gameMaster.bestTimes[bestIndex] == 0f)
+            if (isTimeBased)
             {
-                gameMaster.bestTimes[bestIndex] = timeTaken;
-                newBest = true;
+                player.playerScore = (int)(countDown.timeLeft * pointConvertModifier);
+                if (gameMaster.bestTimes[bestIndex] > timeTaken || gameMaster.bestTimes[bestIndex] == 0f)
+                {
+                    gameMaster.bestTimes[bestIndex] = timeTaken;
+                    newBest = true;
+                }
             }
 
-            if (gameMaster.bestMorales[bestIndex] < cutnRun.morale)
+            if (isMoraleBased)
             {
-                gameMaster.bestMorales[bestIndex] = cutnRun.morale;
-                newBest = true;
+                player.playerScore = cutnRun.morale * 100;
+                if (gameMaster.bestMorales[bestIndex] < cutnRun.morale)
+                {
+                    gameMaster.bestMorales[bestIndex] = cutnRun.morale;
+                    newBest = true;
+                }
             }
 
             if (gameMaster.bestStars[bestIndex] < acquiredStars)
@@ -305,6 +315,7 @@ public class GameOverSystem : MonoBehaviour
     //Checks using preset requirement whether the player reached the required points amount to obtain stars or not
     private void StarEvaluation()
     {
+        Debug.Log("Star Evaluating");
         if (acquiredStars < 3)
         {
             if (isScoreBased)
@@ -321,7 +332,7 @@ public class GameOverSystem : MonoBehaviour
                 {
                     acquiredStars = 2;
                 }
-                else if (player.playerScore > threeStarsScore)
+                else if (player.playerScore >= threeStarsScore)
                 {
                     acquiredStars = 3;
                 }

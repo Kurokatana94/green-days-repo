@@ -7,7 +7,12 @@ public class LevelLoader : MonoBehaviour
 {
     public GameObject loadingScreen;
     public Slider loadingBar;
-    public DataManagementSystem data;
+    private DataManagementSystem data;
+
+    private void Awake()
+    {
+        data = GameObject.FindGameObjectWithTag("Data").GetComponent<DataManagementSystem>();
+    }
 
     public void LoadLevel(int sceneIndex)
     {
