@@ -16,7 +16,6 @@ public class GameMaster : MonoBehaviour
 
     //Save Slot data variables
     public string name;
-    public DateTime date;
     public double timePlayed;
 
     // GameData variables to store
@@ -119,6 +118,11 @@ public class GameMaster : MonoBehaviour
         for (int i = 0; i < bestMorales.Count; i++)
         {
             bestMorales[i] = 0;
+        }
+
+        for (int i = 0; i < tutorial.Length; i++)
+        {
+            tutorial[i] = false;
         }
     }
 }

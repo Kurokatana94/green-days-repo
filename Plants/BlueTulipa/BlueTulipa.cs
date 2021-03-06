@@ -109,6 +109,7 @@ public class BlueTulipa : MonoBehaviour
         {
             weeds.tulipaCounter -= 1;
             animator.SetTrigger("IsDead");
+            gameObject.transform.GetChild(gameObject.transform.childCount - 1).gameObject.SetActive(false);//Makes disappear the shadow once the plant is dead
             isDead = true;
             this.enabled = false;
         }

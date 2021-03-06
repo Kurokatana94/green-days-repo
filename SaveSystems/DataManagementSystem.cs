@@ -44,9 +44,11 @@ public class DataManagementSystem : MonoBehaviour
         gameMaster.skinActive = data.skinActive;
         gameMaster.skillActive = data.skillActive;
 
+        //Checks which tutorials have been completed and which not
+        gameMaster.tutorial = data.tutorial;
+
         //Basic info for the player
         gameMaster.name = data.name;
-        gameMaster.date = data.date;
         gameMaster.timePlayed = data.timePlayed;
     }
 
@@ -81,9 +83,11 @@ public class DataManagementSystem : MonoBehaviour
         gameMaster.skinActive = data.skinActive;
         gameMaster.skillActive = data.skillActive;
 
+        //Checks which tutorials have been completed and which not
+        gameMaster.tutorial = data.tutorial;
+
         //Basic info for the player
         gameMaster.name = data.name;
-        gameMaster.date = data.date;
         gameMaster.timePlayed = data.timePlayed;
 
         SaveSystem.SaveStartData(gameMaster);

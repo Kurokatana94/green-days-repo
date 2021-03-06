@@ -11,13 +11,16 @@ public class GoldenWeed : MonoBehaviour
     public Animator animator;
     private GameOverSystem gameOver;
     public GameObject scoreFeedback;
+    private GameMaster gameMaster;
     public TextMeshPro scoreText;
     public int health = 1;
-    private int points = 1000;
+    private int coins = 500;
 
     public bool isDead;
+
     private void Awake()
     {
+        gameMaster = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMaster>();
         gameOver = GameObject.FindGameObjectWithTag("GO").GetComponent<GameOverSystem>();
         weeds = GameObject.FindGameObjectWithTag("Spawner").GetComponent<WeedsSpawnSystem>();
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
@@ -30,6 +33,7 @@ public class GoldenWeed : MonoBehaviour
             weeds.goldCounter -= 1;
             animator.SetTrigger("IsDead");
             if (!gameOver.isMoraleBased) UpdateScore();
+            gameObject.transform.GetChild(gameObject.transform.childCount - 1).gameObject.SetActive(false);//Makes disappear the shadow once the plant is dead
             isDead = true;
             this.enabled = false;
         }
@@ -57,8 +61,8 @@ public class GoldenWeed : MonoBehaviour
         scoreFeedback.SetActive(true);
         if (gameOver.isScoreBased)
         {
-            player.playerScore += points;
-            scoreText.text = "+ " + points.ToString();
+            gameMaster.totalMoney += coins;
+            scoreText.text = "+ " + coins.ToString();
         }
         else if (gameOver.isTimeBased)
         {

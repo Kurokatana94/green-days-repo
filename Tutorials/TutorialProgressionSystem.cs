@@ -9,6 +9,8 @@ public class TutorialProgressionSystem : MonoBehaviour
     public int tutorialNumber;
     private int pageNumber = 0;
 
+    //This class will take care of the different tutorials progression by checking whether it was already completed and deactivate it if it was, or activate it if it wasn't.
+    //Also it will make the tutorials progress thru their stages and once all are completed, mark it as completed. 
     private void Awake()
     {
         gameMaster = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMaster>();

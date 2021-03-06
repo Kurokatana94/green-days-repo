@@ -26,6 +26,7 @@ public class BladeWeed : MonoBehaviour
             transform.GetChild(1).gameObject.SetActive(true);
             weeds.bladeCounter -= 1;
             animator.SetTrigger("IsDead");
+            gameObject.transform.GetChild(gameObject.transform.childCount - 1).gameObject.SetActive(false);//Makes disappear the shadow once the plant is dead
             isDead = true;
             this.enabled = false;
         }

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
@@ -193,8 +191,15 @@ public class ShopSystem : MonoBehaviour
         }
     }
 
-    public void ExitSkillShop()
+    public void ExitShop()
     {
+        closetWasOpen = false;
+        skinPrice.text = skinPriceDefault;
+        for (int i = 0; i < skinButtons.Length; i++)
+        {
+            skinPreviews[i].SetActive(false);
+        }
+
         skillPreviewsFolder.GetComponent<Image>().enabled = true;
         skillPrice.text = skillPriceDefault;
         for (int i = 0; i < skillButtons.Length; i++)
@@ -279,11 +284,11 @@ public class ShopSystem : MonoBehaviour
         data.AutoSaveGame();
     }
 
-    public void ResetAtClose()
+    /*public void ResetAtClose()
     {
         skinN = 0;
         skillN = 0;
         UpdateSelection(skinButtons[skinN]);
         UpdateSelection(skillButtons[skillN]);
-    }
+    }*/
 }

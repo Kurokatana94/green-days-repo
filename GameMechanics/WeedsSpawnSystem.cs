@@ -3,7 +3,6 @@ using UnityEngine;
 using Quaternion = UnityEngine.Quaternion;
 using Random = UnityEngine.Random;
 using Vector3 = UnityEngine.Vector3;
-using GDTools;
 
 public class WeedsSpawnSystem : MonoBehaviour
 {

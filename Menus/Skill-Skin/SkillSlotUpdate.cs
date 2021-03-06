@@ -13,12 +13,24 @@ public class SkillSlotUpdate : MonoBehaviour
         gameMaster = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMaster>();
     }
 
+    private void Start()
+    {
+        if (gameObject.GetComponent<Button>().interactable)
+        {
+            gameObject.GetComponent<Button>().interactable = false;
+        }
+    }
+
     private void Update()
     {
         for (int i = 0; i < gameMaster.skillActive.Length; i++)
         {
             if (gameMaster.skillActive[i])
             {
+                if (!gameObject.GetComponent<Button>().interactable)
+                {
+                    gameObject.GetComponent<Button>().interactable = true;
+                }
                 gameObject.transform.GetChild(i).gameObject.SetActive(true);
                 description.transform.GetChild(i).gameObject.SetActive(true);
                 description.GetComponent<Image>().enabled = false;
@@ -39,5 +51,6 @@ public class SkillSlotUpdate : MonoBehaviour
             gameMaster.skillActive[i] = false;
         }
         description.transform.GetChild(gameObject.transform.childCount - 1).gameObject.SetActive(true);
+        gameObject.GetComponent<Button>().interactable = false;
     }
 }

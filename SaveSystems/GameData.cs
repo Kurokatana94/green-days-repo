@@ -8,7 +8,6 @@ using System;
 public class GameData
 {
     public string name;
-    public DateTime date;
     public double timePlayed;
 
     public int totalPoints;
@@ -19,11 +18,13 @@ public class GameData
     public List<int> bestMorales = new List<int>();
     public List<int> bestStars = new List<int>();
 
-    public bool[] haveSkin = new bool[4];
-    public bool[] skinActive = new bool[4];
+    public bool[] haveSkin = new bool[6];
+    public bool[] skinActive = new bool[6];
 
     public bool[] haveSkill = new bool[6];
     public bool[] skillActive = new bool[6];
+
+    public bool[] tutorial = new bool[15];
 
     public GameData(GameMaster gameMaster)
     {
@@ -42,8 +43,9 @@ public class GameData
         skinActive = gameMaster.skinActive;
         skillActive = gameMaster.skillActive;
 
+        tutorial = gameMaster.tutorial;
+
         name = gameMaster.name;
-        date = gameMaster.date;
         timePlayed = gameMaster.timePlayed;
     }
 }
