@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using System.IO;
 
 public class DataManagementSystem : MonoBehaviour
@@ -35,6 +33,7 @@ public class DataManagementSystem : MonoBehaviour
         gameMaster.totalPoints = data.totalPoints;
         gameMaster.totalStars = data.totalStars;
         gameMaster.bestStars = data.bestStars;
+        gameMaster.sideQuestsCompleted = data.sideQuestsCompleted;
 
         //Checks wheter skins or skills have been unlocked or not
         gameMaster.haveSkin = data.haveSkin;
@@ -74,6 +73,7 @@ public class DataManagementSystem : MonoBehaviour
         gameMaster.totalPoints = data.totalPoints;
         gameMaster.totalStars = data.totalStars;
         gameMaster.bestStars = data.bestStars;
+        gameMaster.sideQuestsCompleted = data.sideQuestsCompleted;
 
         //Checks wheter skins have been unlocked or not
         gameMaster.haveSkin = data.haveSkin;

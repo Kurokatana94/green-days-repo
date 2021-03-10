@@ -47,8 +47,6 @@ public class GameOverSystem : MonoBehaviour
     //Bool used to check if the specific level sidequest has been completed
     [HideInInspector]
     public bool sideQuestComplete;
-    [HideInInspector]
-    public bool sideQuestAlreadyComplete;
 
     //Money gained with level completition and different bonuses options
     [Header("Rewards")]
@@ -421,19 +419,22 @@ public class GameOverSystem : MonoBehaviour
                 rewardStars.transform.GetChild(i).gameObject.SetActive(true);
             }
         }
+
         if (newBest)
         {
             totalReward += bestScoreBonus;
             rewardBest.SetActive(true);
             rewardBest.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = bestScoreBonus.ToString();
         }
+
         if (firstTime)
         {
             totalReward += firstTimeBonus;
             rewardFirstTime.SetActive(true);
             rewardFirstTime.transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().text = firstTimeBonus.ToString();
         }
-        /*if (sideQuestAlreadyComplete)
+
+        if (sideQuestComplete && gameMaster.sideQuestsCompleted[bestIndex])
         {
             totalReward += sideQuestBonus / 10;
             rewardSideQuest.SetActive(true);
@@ -444,7 +445,8 @@ public class GameOverSystem : MonoBehaviour
             totalReward += sideQuestBonus;
             rewardSideQuest.SetActive(true);
             rewardSideQuest.transform.GetComponentInChildren<TextMeshProUGUI>().text = sideQuestBonus.ToString();
-        }*/
+            gameMaster.sideQuestsCompleted[bestIndex] = true;
+        }
     }
 
     //Functions that checks whther was the first time the level was completed or not

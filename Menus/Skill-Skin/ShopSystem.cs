@@ -24,10 +24,10 @@ public class ShopSystem : MonoBehaviour
     //Special items list with 'name', 'cost', and boolean to check if the item 
     //will be aquired at the start (skins)
     public SpecialItem basicSkin = new SpecialItem("Basic skin beff", 0, true);
-    public SpecialItem skin1 = new SpecialItem("Old Beff", 20000, false);
+    public SpecialItem skin1 = new SpecialItem("Old Beff", 15000, false);
     public SpecialItem skin2 = new SpecialItem("Red Beff", 10000, false);
     public SpecialItem skin3 = new SpecialItem("Christmas Beff", 25000, false);
-    public SpecialItem skin4 = new SpecialItem("Viking Beff", 15000, false);
+    public SpecialItem skin4 = new SpecialItem("Viking Beff", 25000, false);
     public SpecialItem skin5 = new SpecialItem("Blue Beff", 5000, false);
 
     [HideInInspector]
@@ -35,11 +35,11 @@ public class ShopSystem : MonoBehaviour
 
     //Special items list with 'name', 'cost', and boolean to check if the item 
     //will be aquired at the start (skills)
-    public SpecialItem skill1 = new SpecialItem("Fast Walk", 1000, false);
-    public SpecialItem skill2 = new SpecialItem("Boomerang Blade", 5000, false);
-    public SpecialItem skill3 = new SpecialItem("Tornado Blade", 10000, false);
-    public SpecialItem skill4 = new SpecialItem("Blade Seeds", 7000, false);
-    public SpecialItem skill5 = new SpecialItem("Tulipa Seeds", 7000, false);
+    public SpecialItem skill1 = new SpecialItem("Fast Walk", 5000, false);
+    public SpecialItem skill2 = new SpecialItem("Boomerang Blade", 10000, false);
+    public SpecialItem skill3 = new SpecialItem("Tornado Blade", 15000, false);
+    public SpecialItem skill4 = new SpecialItem("Blade Seeds", 15000, false);
+    public SpecialItem skill5 = new SpecialItem("Tulipa Seeds", 10000, false);
     public SpecialItem skill6 = new SpecialItem("Green Thumb", 10000, false);
 
     private SpecialItem[] skill = new SpecialItem[6];

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
 using System;
 
 //Class for creating save files of game information
@@ -17,6 +15,7 @@ public class GameData
     public List<int> bestScores = new List<int>();
     public List<int> bestMorales = new List<int>();
     public List<int> bestStars = new List<int>();
+    public List<bool> sideQuestsCompleted = new List<bool>();
 
     public bool[] haveSkin = new bool[6];
     public bool[] skinActive = new bool[6];

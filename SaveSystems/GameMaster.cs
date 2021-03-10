@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using UnityEditorInternal.VersionControl;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -26,6 +21,7 @@ public class GameMaster : MonoBehaviour
     public List<int> bestScores = new List<int>();
     public List<int> bestMorales = new List<int>();
     public List<int> bestStars = new List<int>();
+    public List<bool> sideQuestsCompleted = new List<bool>();
 
     //StartData for checking availables save files
     public int lastSlot;

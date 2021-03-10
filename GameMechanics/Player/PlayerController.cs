@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
     public bool canWalk = true;
     
     //Speed Up skill variables
-    public float speedMultiplier, speedBoost ;
+    public float speedMultiplier, speedBoost;
 
     //Scythe power up variables
     private SlashSystem slash;

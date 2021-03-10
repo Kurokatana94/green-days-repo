@@ -165,6 +165,11 @@ public class WeedsSpawnSystem : MonoBehaviour
         {
             SpawnGoldWeed();
         }
+
+        for (int i = 0; i < tulipaStartQuantity; i++)
+        {
+            SpawnTulipa();
+        }
     }
 
     private void FixedUpdate()
