@@ -34,7 +34,7 @@ public class WeedsSpawnSystem : MonoBehaviour
     [Tooltip("Shows how many Blade Weeds currently on the field (Not to modify!)")]
     public int bladeCounter;
     [Tooltip("Max amount able to spawn together")]
-    public int maxBladeWeedConter;
+    public int maxBladeWeedCounter;
     [Tooltip("CoolDown before next spawn")]
     public float bladeGrowCD;
     [Tooltip("Amount of time removed from grow CoolDown duration at each spawn")]
@@ -240,7 +240,7 @@ public class WeedsSpawnSystem : MonoBehaviour
 
     private void Update()
     {
-        if (evilWeedCounter < maxEvilWeedCounter && evilWeedCanGrow)
+        if (evilWeedCounter < maxEvilWeedCounter && evilWeedCanGrow && maxEvilWeedCounter > 0)
         {
             //SpawnPlant(weed);
             SpawnEvilWeed();
@@ -252,7 +252,7 @@ public class WeedsSpawnSystem : MonoBehaviour
             }
         }
 
-        if (bushCounter < maxBushCounter && bushCanGrow)
+        if (bushCounter < maxBushCounter && bushCanGrow && maxBushCounter > 0)
         {
             //SpawnPlant(bush);
             SpawnBush();
@@ -264,7 +264,7 @@ public class WeedsSpawnSystem : MonoBehaviour
             }
         }
 
-        if (tulipaCounter < maxTulipaCounter && tulipaCanGrow)
+        if (tulipaCounter < maxTulipaCounter && tulipaCanGrow && maxTulipaCounter > 0)
         {
             //SpawnPlant(tulipa);
             SpawnTulipa();
@@ -277,7 +277,7 @@ public class WeedsSpawnSystem : MonoBehaviour
 
         }
 
-        if(greenCounter < maxGreenWeedCounter && greenCanGrow)
+        if(greenCounter < maxGreenWeedCounter && greenCanGrow && maxGreenWeedCounter > 0)
         {
             SpawnGreenWeed();
             greenGrowCD -= greenGrowSpeedModifier;
@@ -288,7 +288,7 @@ public class WeedsSpawnSystem : MonoBehaviour
             }
         }
 
-        if(bladeCounter < maxBladeWeedConter && bladeCanGrow)
+        if(bladeCounter < maxBladeWeedCounter && bladeCanGrow && maxBladeWeedCounter > 0)
         {
             SpawnBladeWeed();
             bladeGrowCD -= bladeGrowSpeedModifier;
@@ -299,7 +299,7 @@ public class WeedsSpawnSystem : MonoBehaviour
             }
         }
 
-        if(goldCounter < maxGoldenWeedCounter && goldCanGrow)
+        if(goldCounter < maxGoldenWeedCounter && goldCanGrow && maxGoldenWeedCounter > 0)
         {
             SpawnGoldWeed();
             goldGrowCD -= goldGrowSpeedModifier;

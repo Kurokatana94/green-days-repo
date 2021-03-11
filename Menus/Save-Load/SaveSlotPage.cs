@@ -41,7 +41,7 @@ public class SaveSlotPage : MonoBehaviour
                 slots[i - 1].GetComponent<SaveSlot>().nameTxt.text = data.name;
                 slots[i - 1].GetComponent<SaveSlot>().timeTxt.text = TimeSpan.FromSeconds(data.timePlayed).ToString(@"hh\:mm\:ss");
                 slots[i - 1].GetComponent<SaveSlot>().moneyTxt.text = data.totalMoney.ToString();
-                slots[i - 1].GetComponent<SaveSlot>().starsTxt.text = data.totalStars.ToString();
+                slots[i - 1].GetComponent<SaveSlot>().starsTxt.text = data.acquiredStars.ToString();
             }
             else break;
         }

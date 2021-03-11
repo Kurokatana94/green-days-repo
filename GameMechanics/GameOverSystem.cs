@@ -246,7 +246,7 @@ public class GameOverSystem : MonoBehaviour
 
             if (gameMaster.bestStars[bestIndex] < acquiredStars)
             {
-                gameMaster.totalStars += acquiredStars - gameMaster.bestStars[bestIndex];
+                gameMaster.acquiredStars += acquiredStars - gameMaster.bestStars[bestIndex];
                 gameMaster.bestStars[bestIndex] = acquiredStars;
             }
 

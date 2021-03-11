@@ -24,7 +24,10 @@ public class SkinMenuSystem : MonoBehaviour
     {
         UpdatePreviewArray();
         UpdateButtonArray();
+    }
 
+    private void Update()
+    {
         for (int i = 0; i < skinButtons.Length; i++)
         {
             if (gameMaster.haveSkin[i]) skinButtons[i].interactable = true;

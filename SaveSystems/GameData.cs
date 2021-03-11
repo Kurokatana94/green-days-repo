@@ -11,6 +11,8 @@ public class GameData
     public int totalPoints;
     public int totalMoney;
     public int totalStars;
+    public int acquiredStars;
+
     public List<double> bestTimes = new List<double>();
     public List<int> bestScores = new List<int>();
     public List<int> bestMorales = new List<int>();
@@ -30,11 +32,13 @@ public class GameData
         totalPoints = gameMaster.totalPoints; 
         totalMoney = gameMaster.totalMoney;
         totalStars = gameMaster.totalStars;
+        acquiredStars = gameMaster.acquiredStars;
 
         bestScores = gameMaster.bestScores;
         bestTimes = gameMaster.bestTimes;
         bestMorales = gameMaster.bestMorales;
         bestStars = gameMaster.bestStars;
+        sideQuestsCompleted = gameMaster.sideQuestsCompleted;
 
         haveSkin = gameMaster.haveSkin;
         haveSkill = gameMaster.haveSkill;

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class InGameSkillTutorial : MonoBehaviour
 {
@@ -11,11 +9,11 @@ public class InGameSkillTutorial : MonoBehaviour
     private void Awake()
     {
         gameMaster = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMaster>();
-        gameOver = GameObject.FindGameObjectWithTag("GM").GetComponent<GameOverSystem>();
+        gameOver = GameObject.FindGameObjectWithTag("GO").GetComponent<GameOverSystem>();
 
         foreach (bool isActive in gameMaster.skillActive)
         {
-            if (isActive)
+            if (isActive == true)
             {
                 hasAbility = true;
                 return;

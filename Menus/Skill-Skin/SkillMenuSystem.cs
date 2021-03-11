@@ -20,7 +20,10 @@ public class SkillMenuSystem : MonoBehaviour
         skillButtons = new GameObject[buttonFolder.transform.childCount];
 
         UpdateButtonArray();
+    }
 
+    private void Update()
+    {
         for (int i = 0; i < skillButtons.Length; i++)
         {
             if (gameMaster.haveSkill[i])

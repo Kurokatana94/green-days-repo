@@ -33,6 +33,7 @@ public class DataManagementSystem : MonoBehaviour
         gameMaster.totalPoints = data.totalPoints;
         gameMaster.totalStars = data.totalStars;
         gameMaster.bestStars = data.bestStars;
+        gameMaster.acquiredStars = data.acquiredStars;
         gameMaster.sideQuestsCompleted = data.sideQuestsCompleted;
 
         //Checks wheter skins or skills have been unlocked or not
@@ -73,6 +74,7 @@ public class DataManagementSystem : MonoBehaviour
         gameMaster.totalPoints = data.totalPoints;
         gameMaster.totalStars = data.totalStars;
         gameMaster.bestStars = data.bestStars;
+        gameMaster.acquiredStars = data.acquiredStars;
         gameMaster.sideQuestsCompleted = data.sideQuestsCompleted;
 
         //Checks wheter skins have been unlocked or not
