@@ -7,6 +7,8 @@ public class LeafBladeSystem : MonoBehaviour
     public LayerMask plantLayers;
     public AudioSource audio;
     public float leafRange;
+    [HideInInspector]
+    public bool greenThumbActive = false;
     private bool hasHit;
 
     void Update()
@@ -31,8 +33,20 @@ public class LeafBladeSystem : MonoBehaviour
             }
             else if (plant.CompareTag("Tulipa"))
             {
-                plant.GetComponent<RedTulipa>().GotHit();
-                audio.Play();
+                if (greenThumbActive)
+                {
+                    int n = Random.Range(1, 100);
+                    if (n < 50)
+                    {
+                        plant.GetComponent<RedTulipa>().GotHit();
+                        audio.Play();
+                    }
+                }
+                else
+                {
+                    plant.GetComponent<BlueTulipa>().GotHit();
+                    audio.Play();
+                }
             }
             else if (plant.CompareTag("Bush"))
             {
@@ -56,8 +70,20 @@ public class LeafBladeSystem : MonoBehaviour
             }
             else if (plant.CompareTag("SpecialTulipa"))
             {
-                plant.GetComponent<BlueTulipa>().GotHit();
-                audio.Play();
+                if (greenThumbActive)
+                {
+                    int n = Random.Range(1, 100);
+                    if (n < 50)
+                    {
+                        plant.GetComponent<RedTulipa>().GotHit();
+                        audio.Play();
+                    }
+                }
+                else
+                {
+                    plant.GetComponent<BlueTulipa>().GotHit();
+                    audio.Play();
+                }
             }
         }
     }

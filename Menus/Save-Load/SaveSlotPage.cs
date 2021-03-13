@@ -1,15 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using System.IO;
-using TMPro;
 using System;
 
 //Class that take care of the load page
 public class SaveSlotPage : MonoBehaviour
 {
-    private GameMaster gameMaster;
+    [Tooltip("Insert the saveslot folder")]
     public GameObject slotsFolder;
+
+    private GameMaster gameMaster;
     public GameObject[] slots;
 
     private void Awake()
@@ -19,7 +18,9 @@ public class SaveSlotPage : MonoBehaviour
     }
 
     private void Start()
-    {        
+    {
+        slots = new GameObject[slotsFolder.transform.childCount];
+
         for (int i = 0; i < slots.Length; i++)
         {
             slots[i] = slotsFolder.transform.GetChild(i).GetChild(0).gameObject;

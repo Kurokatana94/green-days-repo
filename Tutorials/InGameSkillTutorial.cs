@@ -26,13 +26,4 @@ public class InGameSkillTutorial : MonoBehaviour
             gameMaster.skillActive[1] = true;
         }
     }
-
-    private void Update()
-    {
-        if (gameOver.gameOver && !hasAbility)
-        {
-            gameMaster.haveSkill[1] = false;
-            gameMaster.skillActive[1] = false;
-        }
-    }
 }

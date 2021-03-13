@@ -18,16 +18,18 @@ public class HubTutorialsConditions : MonoBehaviour
         {
             transform.GetChild(0).gameObject.SetActive(true);
         }
-
-        if (gameMaster.tutorial[10] && !gameMaster.tutorial[1])
-        {
-            transform.GetChild(1).gameObject.SetActive(true);
-        }
     }
 
     private void Update()
     {
-        if(skinShop.activeInHierarchy && !gameMaster.tutorial[2])
+        if (gameMaster.tutorial[10] && !gameMaster.tutorial[1])
+        {
+            gameMaster.skillActive[1] = false;
+            gameMaster.haveSkill[1] = false;
+            transform.GetChild(1).gameObject.SetActive(true);
+        }
+
+        if (skinShop.activeInHierarchy && !gameMaster.tutorial[2])
         {
             transform.GetChild(2).gameObject.SetActive(true);
         }

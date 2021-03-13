@@ -75,9 +75,11 @@ public class GameMaster : MonoBehaviour
     private void ResetVariables()
     {
         // List of all GameData variables to reset
+        name = null;
         totalMoney = 0;
         totalPoints = 0;
         acquiredStars = 0;
+        timePlayed = 0;
 
         skinActive[0] = true;
         for (int i = 1; i < skinActive.Length; i++)
@@ -114,6 +116,11 @@ public class GameMaster : MonoBehaviour
         for (int i = 0; i < bestMorales.Count; i++)
         {
             bestMorales[i] = 0;
+        }
+
+        for (int i = 0; i < sideQuestsCompleted.Count; i++)
+        {
+            sideQuestsCompleted[i] = false;
         }
 
         for (int i = 0; i < tutorial.Length; i++)
