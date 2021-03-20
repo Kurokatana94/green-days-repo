@@ -1,11 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CountDownSystem : MonoBehaviour
 {
     public double maxTime;
     public double timeLeft;
+    [HideInInspector]
+    public bool canStart = false;
     private GameOverSystem gameOver;
     public AudioSource weeds;
 
@@ -18,7 +18,7 @@ public class CountDownSystem : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (timeLeft > 0f)
+        if (timeLeft > 0f && canStart)
         {
             timeLeft -= Time.fixedDeltaTime;
         }

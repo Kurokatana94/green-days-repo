@@ -6,13 +6,12 @@ public class GreenThumbTulipa : MonoBehaviour
     [Header("References")]
     public GameObject icon;
 
-    [HideInInspector]
-
     private void Start()
     {
         icon.SetActive(true);
     }
 
+    //Will check which bladeweeds have been cut to then activete di effect of this skill
     private void Update()
     {
         foreach(GameObject bladeWeed in GameObject.FindGameObjectsWithTag("Blde"))
