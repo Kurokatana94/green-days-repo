@@ -1,29 +1,30 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CountDownSystem : MonoBehaviour
 {
     public double maxTime;
     public double timeLeft;
-    public GameOverSystem gameOverSystem;
+    [HideInInspector]
+    public bool canStart = false;
+    private GameOverSystem gameOver;
     public AudioSource weeds;
 
     private void Awake()
     {
+        gameOver = GameObject.FindGameObjectWithTag("GO").GetComponent<GameOverSystem>();
         weeds.mute = true;
         timeLeft = maxTime;
     }
 
     private void FixedUpdate()
     {
-        if (timeLeft > 0f)
+        if (timeLeft > 0f && canStart)
         {
             timeLeft -= Time.fixedDeltaTime;
         }
         else if(timeLeft <= 0f)
         {
-            gameOverSystem.gameOver = true;
+            gameOver.gameOver = true;
             Debug.Log("Fine Partita");
         }
     }

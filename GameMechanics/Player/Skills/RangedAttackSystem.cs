@@ -1,20 +1,31 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class RangedAttackSystem : MonoBehaviour
 {
-    public float skillRange;
     public Transform skillPoint;
     public Animator animator;
     public LayerMask plantLayers;
     public AudioSource audio;
+    public GameObject icon;
+    public GameObject frame;
+    private PlayerController player;
+    public float skillRange;
     public float skillCD;
     public double skillCDTimer;
 
 
     //Bool used to check if reset timer in cutter run mode
     public bool hasHit, isActive, isReady;
+
+    private void Awake()
+    {
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+    }
+
+    private void Start()
+    {
+        icon.SetActive(true);
+    }
 
     private void FixedUpdate()
     {
@@ -31,10 +42,9 @@ public class RangedAttackSystem : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetButtonDown("Skill") && !isActive && isReady)
+        if (Input.GetButtonDown("Skill"))
         {
-            isActive = true;
-            animator.SetTrigger("IsActivated");
+            ActivateSkill();
         }
 
         if (isActive)
@@ -58,14 +68,13 @@ public class RangedAttackSystem : MonoBehaviour
             }
             else if (plant.CompareTag("Tulipa"))
             {
-                plant.GetComponent<Tulipa>().GotHit();
+                plant.GetComponent<RedTulipa>().GotHit();
                 audio.Play();
             }
-            else if (plant.CompareTag("Bush") && !plant.GetComponent<Bush>().alreadyHit)
+            else if (plant.CompareTag("Bush"))
             {
                 plant.GetComponent<Bush>().GotHit();
                 audio.Play();
-                plant.GetComponent<Bush>().alreadyHit = true;
             }
             else if (plant.CompareTag("Green"))
             {
@@ -82,6 +91,29 @@ public class RangedAttackSystem : MonoBehaviour
                 plant.GetComponent<GoldenWeed>().GotHit();
                 audio.Play();
             }
+            else if (plant.CompareTag("SpecialTulipa"))
+            {
+                plant.GetComponent<BlueTulipa>().GotHit();
+                audio.Play();
+            }
+        }
+    }
+
+    public void ActivateSkill()
+    {
+        if (!isActive && isReady)
+        {
+            isActive = true;
+            if (player.facingRight)
+            {
+                transform.parent.transform.eulerAngles = new Vector3(0, 0, 0);
+            }
+            else
+            {
+                transform.parent.transform.eulerAngles = new Vector3(0, 180, 0);
+            }
+            animator.SetTrigger("IsActivated");
+            frame.SetActive(true);
         }
     }
 

@@ -5,6 +5,7 @@ using UnityEngine;
 public class SpeedUpSystem : MonoBehaviour
 {
     private PlayerController player;
+    public GameObject icon;
 
     private void Awake()
     {
@@ -13,6 +14,7 @@ public class SpeedUpSystem : MonoBehaviour
 
     private void Start()
     {
+        icon.SetActive(true);
         player.speedBoost = player.speedMultiplier;
     }
 }

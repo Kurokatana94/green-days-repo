@@ -6,7 +6,6 @@ public class SwirlEnd : StateMachineBehaviour
 {
     private SwirlAttackSystem swirl;
 
-
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         swirl = GameObject.FindGameObjectWithTag("Skill").GetComponent<SwirlAttackSystem>();
@@ -17,6 +16,7 @@ public class SwirlEnd : StateMachineBehaviour
     {
         swirl.isActive = false;
         swirl.isReady = false;
+        swirl.frame.SetActive(false);
         Debug.Log("Process completed");
     }
 }

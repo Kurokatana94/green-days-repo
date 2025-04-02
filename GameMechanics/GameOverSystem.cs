@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Dynamic;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,18 +9,28 @@ public class GameOverSystem : MonoBehaviour
     [Header("References")]
     public GameObject gameOverMenu;
     public TextMeshProUGUI score;
-    public TextMeshProUGUI best;
     public PlayerController player;
     public GameObject nextLevel;
-    public GameObject restartLevel;
+    public GameObject[] stars;
+    public GameObject rewardStars, rewardBest, rewardFirstTime, rewardSideQuest, reward;
+    private LevelLoader loader;
+
+    //Best score variables
+    public GameObject crown;
+    private bool newBest;
+
+    //Variables used to activate the restart/retry menu whenever the level challenge has been failed
+    public GameObject tryAgainMenu;
+    private bool isSuccessful; 
+
     //Data management variables
-    public DataManagementSystem data;
+    private DataManagementSystem data;
     private GameMaster gameMaster;
     private int bestIndex;
     private bool isUpdated = false;
 
     [Space]
-    [Tooltip("To activate if it is the last level of the game (it will dwactivate the next level option at the game over screen)")]
+    [Tooltip("To activate if it is the last level of the game (it will deactivate the next level option at the game over screen)")]
     public bool isLastLevel;
 
     [Header("Game modes")]
@@ -34,13 +40,37 @@ public class GameOverSystem : MonoBehaviour
     public bool isTimeBased;
     [Tooltip("Game mode that require the player to constantly cut weeds to never run out of morale")]
     public bool isMoraleBased;
+
+    //Bool used in function to check whether it is the first time playing the level or not
+    private bool firstTime = true;
+
+    //Bool used to check if the specific level sidequest has been completed
+    [HideInInspector]
+    public bool sideQuestComplete;
+
+    //Money gained with level completition and different bonuses options
+    [Header("Rewards")]
+    [Tooltip("Base money gained upon level completition")]
+    public int baseMoneyReward;
+    [Tooltip("Bonus reward gained for each new star obtained (if a star will be obtained a second time, the reward will be the same devided by 10)")]
+    public int starBonus;
+    [Tooltip("Bonus reward gained for creating a new best score")]
+    public int bestScoreBonus;
+    [Tooltip("Bonus reward gained upon first completition of the current level")]
+    public int firstTimeBonus;
+    [Tooltip("Bonus reward gained whether the player will complete the current level sidequest (if a sidequest will be completed a second time," +
+        " the reward will be the same devided by 10)")]
+    public int sideQuestBonus;
+    private int totalReward;
     
     //Score-based variables
     [Header("Score-based settings")]
     [Tooltip("Required score to achieve before time ends to win the match")]
     public int requiredScore;
-    private float showedScore = 0f;
+    private float showedReward = 0f;
     private float counterSpeed = .8f;
+    [Tooltip("Minimum amount of points required to acquire each star")]
+    public int oneStarScore, twoStarsScore, threeStarsScore;
     
     //Time-based variables
     [Header("Time-based settings")]
@@ -51,26 +81,35 @@ public class GameOverSystem : MonoBehaviour
     [Tooltip("Modifier that converts the time left before the match end into points")]
     public float pointConvertModifier;
     private double timeTaken;
+    [Tooltip("Max amount of time required to acquire each star")]
+    public double oneStarTime, twoStarsTime, threeStarsTime;
 
     //Morale-based variables
     [Header("Morale-based reference")]
     [Tooltip("Insert time management gameobject")]
     public CutnRunSystem cutnRun;
+    [Tooltip("Minimum amount of morale required to acquire each star")]
+    public int oneStarMorale, twoStarsMorale, threeStarsMorale;
 
     [Space]
     //Star system variables
     [Tooltip("Shows how many stars  have been acquired in the current level (Not modify!)")]
-    public int aquiredStars;
+    public int acquiredStars;
+    private int preAcquiredStars;
 
     private void Awake()
     {
+        data = GameObject.FindGameObjectWithTag("Data").GetComponent<DataManagementSystem>();
         gameMaster = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMaster>();
+        loader = GameObject.FindGameObjectWithTag("Loader").GetComponent<LevelLoader>();
     }
 
     private void Start()
     {
         bestIndex = SceneManager.GetActiveScene().buildIndex;
-        aquiredStars = gameMaster.bestStars[bestIndex];   
+        acquiredStars = gameMaster.bestStars[bestIndex];
+        preAcquiredStars = acquiredStars;
+        CheckIfFirstTime();
     }
 
     private void Update()
@@ -78,15 +117,28 @@ public class GameOverSystem : MonoBehaviour
         if (player.plantsKilled >= requiredPlants && isTimeBased)
         {
             gameOver = true;
+            isSuccessful = true;
         }
 
         if (gameOver)
         {
-            timeTaken = countDown.maxTime - countDown.timeLeft;
-            GameOver();
-            data.AutoSaveGame();
-            player.plantsKilled = 0;
-            isUpdated = true;
+            CheckResult();
+            if (isSuccessful)
+            {
+                if (isTimeBased)
+                {
+                    timeTaken = countDown.maxTime - countDown.timeLeft;
+                }
+                GameOver();
+                for (int i = 0; i < acquiredStars; i++)
+                {
+                    stars[i].SetActive(true);
+                }
+                data.AutoSaveGame();
+                player.plantsKilled = 0;
+                if (newBest) crown.SetActive(true);
+            }
+            else TryAgain();
         }
     }
 
@@ -94,8 +146,9 @@ public class GameOverSystem : MonoBehaviour
     public void GameStart()
     {        
         Time.timeScale = 1f;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        loader.LoadLevel(SceneManager.GetActiveScene().buildIndex + 1);
         gameOver = false;
+        gameObject.SetActive(false);
     }
 
     //End the level showing up the gameover window
@@ -107,17 +160,19 @@ public class GameOverSystem : MonoBehaviour
 
         StarEvaluation();
 
+        ShowReward();
+
         if (isScoreBased)
         {
-            BestScore();
+            ShowScore();
         }
         else if (isTimeBased)
         {
-            BestTime();
+            ShowTime();
         }
         else if (isMoraleBased)
         {
-            BestMorale();
+            ShowMorale();
         }
         else
         {
@@ -126,6 +181,12 @@ public class GameOverSystem : MonoBehaviour
         }
     }
 
+    //Function that is activated if the level is lost
+    private void TryAgain()
+    {
+        tryAgainMenu.SetActive(true);
+        Time.timeScale = 0f;
+    }
 
     //Load the main menu
     public void MainMenu()
@@ -154,173 +215,149 @@ public class GameOverSystem : MonoBehaviour
     {
         if (!isUpdated)
         {
-            if (isTimeBased) player.playerScore = (int)(countDown.timeLeft * pointConvertModifier);
-
-            if (isMoraleBased) player.playerScore = cutnRun.morale * 100;
-
-            gameMaster.totalPoints += player.playerScore;
-
-            if (gameMaster.bestScores[bestIndex] <= player.playerScore)
+            if (isScoreBased)
             {
-                gameMaster.bestScores[bestIndex] = player.playerScore;
+                if (gameMaster.bestScores[bestIndex] < player.playerScore)
+                {
+                    gameMaster.bestScores[bestIndex] = player.playerScore;
+                    newBest = true;
+                }
             }
 
-            if (gameMaster.bestTimes[bestIndex] >= timeTaken || gameMaster.bestTimes[bestIndex] == 0f)
+            if (isTimeBased)
             {
-                gameMaster.bestTimes[bestIndex] = timeTaken;
+                player.playerScore = (int)(countDown.timeLeft * pointConvertModifier);
+                if (gameMaster.bestTimes[bestIndex] > timeTaken || gameMaster.bestTimes[bestIndex] == 0f)
+                {
+                    gameMaster.bestTimes[bestIndex] = timeTaken;
+                    newBest = true;
+                }
             }
 
-            if (gameMaster.bestMorales[bestIndex] <= cutnRun.morale)
+            if (isMoraleBased)
             {
-                gameMaster.bestMorales[bestIndex] = cutnRun.morale;
+                player.playerScore = cutnRun.morale * 100;
+                if (gameMaster.bestMorales[bestIndex] < cutnRun.morale)
+                {
+                    gameMaster.bestMorales[bestIndex] = cutnRun.morale;
+                    newBest = true;
+                }
             }
 
-            if (gameMaster.bestStars[bestIndex] <= aquiredStars)
+            if (gameMaster.bestStars[bestIndex] < acquiredStars)
             {
-                gameMaster.totalStars += aquiredStars - gameMaster.bestStars[bestIndex];
-                gameMaster.bestStars[bestIndex] = aquiredStars;
-            } 
+                gameMaster.acquiredStars += acquiredStars - gameMaster.bestStars[bestIndex];
+                gameMaster.bestStars[bestIndex] = acquiredStars;
+            }
+
+            TotalReward();
+
+            gameMaster.totalMoney += totalReward;
+
+            isUpdated = true;
+        }
+    }
+
+    private void ShowReward()
+    {
+        UpdateGameMaster();
+
+        reward.GetComponentInChildren<TextMeshProUGUI>().text = RewardCounter().ToString("0");
+
+        if (isLastLevel)
+        {
+            nextLevel.SetActive(false);
+
+            reward.GetComponentInChildren<TextMeshProUGUI>().text = RewardCounter().ToString("0");
         }
     }
 
     //Show the score and best score
-    private void BestScore()
+    private void ShowScore()
     {
-        UpdateGameMaster();
-
-        if (player.playerScore >= requiredScore)
-        {
-            score.text = "Congratulations!!\nYour Score Is:\n\n" + ScoreCounter().ToString("0");
-            nextLevel.SetActive(true);
-        }
-        else
-        {
-            score.text = "Try Again!!\nYour Score Is:\n" + ScoreCounter().ToString("0");
-            restartLevel.SetActive(true);
-        }
-    
+        score.text = player.playerScore.ToString("0");
+            
         if (isLastLevel)
         {
-            nextLevel.SetActive(false);
-            restartLevel.SetActive(false);
-
-            if (player.playerScore >= requiredScore)
-            {
-                score.text = "Congrats!! You Finished our Game!\nYour Score Is:\n" + player.playerScore;
-            }
+            nextLevel.SetActive(false);     
         }
-
-        best.text = "Best Score: " + gameMaster.bestScores[bestIndex].ToString();
     }
 
     //Show the time and best time
-    private void BestTime()
-    {
-        UpdateGameMaster();
-
-        if (countDown.timeLeft > 0)
-        {
-            score.text = "Congratulations!!\nYour Time Is:\n\n" + timeTaken.ToString("F2") + "s";
-            nextLevel.SetActive(true);
-        }
-        else
-        {
-            score.text = "Try Again!!\nCut Them Faster!";
-            restartLevel.SetActive(true);
-        }
+    private void ShowTime()
+    {        
+        score.text = timeTaken.ToString("F2") + "s";
+        
 
         if (isLastLevel)
         {
             nextLevel.SetActive(false);
-            restartLevel.SetActive(false);
-
-            if (countDown.timeLeft > 0f)
-            {
-                score.text = "Congrats!! You Finished our Game!\nYour Time Is:\n" + timeTaken.ToString("F2") + "s";
-            }
         }
-
-        best.text = "Best Time: " + gameMaster.bestTimes[bestIndex].ToString("F2") + "s";
     }
 
     //Shows morale and best morale
-    private void BestMorale()
-    {
-        UpdateGameMaster();
-
-        if(cutnRun.morale > 0)
-        {
-            score.text = "Congrats!! You Managed to Complete Your Task!\nYour Morale Is:\n" + cutnRun.morale.ToString();
-            nextLevel.SetActive(true);
-        }
-        else
-        {
-            score.text = "Try Again!! Your Morale Is Not Strong Enough!";
-            restartLevel.SetActive(true);
-        }
+    private void ShowMorale()
+    {                
+        score.text = cutnRun.morale.ToString() + "%";
 
         if (isLastLevel)
         {
             nextLevel.SetActive(false);
-            restartLevel.SetActive(false);
-            if (cutnRun.morale > 0)
-            {
-                score.text = "Congrats!! You Finished our game!\nYour Morale Is:\n" + cutnRun.morale.ToString();
-            }
         }
-        best.text = "Best Morale: " + gameMaster.bestMorales[bestIndex].ToString() + "%";
     }
 
+    //Checks using preset requirement whether the player reached the required points amount to obtain stars or not
     private void StarEvaluation()
     {
-        if (aquiredStars < 3)
+        Debug.Log("Star Evaluating");
+        if (acquiredStars < 3)
         {
             if (isScoreBased)
             {
-                if (player.playerScore < requiredScore / 2)
+                if (player.playerScore < oneStarScore)
                 {
                     return;
                 }
-                else if (player.playerScore >= requiredScore / 2 && player.playerScore < requiredScore && aquiredStars <= 1)
+                else if (player.playerScore >= oneStarScore && player.playerScore < twoStarsScore && acquiredStars <= 1)
                 {
-                    aquiredStars = 1;
+                    acquiredStars = 1;
                 }
-                else if (player.playerScore >= requiredScore && player.playerScore < requiredScore * 1.5f && aquiredStars <= 2)
+                else if (player.playerScore >= twoStarsScore && player.playerScore < threeStarsScore && acquiredStars <= 2)
                 {
-                    aquiredStars = 2;
+                    acquiredStars = 2;
                 }
-                else if (player.playerScore > requiredScore * 1.5)
+                else if (player.playerScore >= threeStarsScore)
                 {
-                    aquiredStars = 3;
+                    acquiredStars = 3;
                 }
                 else return;
             }
             else if (isTimeBased)
             {
-                if (timeTaken > countDown.maxTime)
+                if (timeTaken > oneStarTime)
                 {
                     return;
                 }
-                else if (timeTaken >= countDown.maxTime * 0.6f && timeTaken < countDown.maxTime && aquiredStars <= 1)
+                else if (timeTaken >= twoStarsTime && timeTaken < oneStarTime && acquiredStars <= 1)
                 {
-                    aquiredStars = 1;
+                    acquiredStars = 1;
                 }
-                else if (timeTaken >= countDown.maxTime * 0.4f && timeTaken < countDown.maxTime * 0.9f && aquiredStars <= 2)
+                else if (timeTaken >= threeStarsTime && timeTaken < twoStarsTime && acquiredStars <= 2)
                 {
-                    aquiredStars = 2;
+                    acquiredStars = 2;
                 }
-                else if (timeTaken < countDown.maxTime * 0.4f)
+                else if (timeTaken < threeStarsTime)
                 {
-                    aquiredStars = 3;
+                    acquiredStars = 3;
                 }
                 else return;
             }
             else if (isMoraleBased)
             {
-                if (cutnRun.morale <= 0) return;
-                else if (cutnRun.morale >= 1 && cutnRun.morale <= 35) aquiredStars = 1;
-                else if (cutnRun.morale > 35 && cutnRun.morale <= 85) aquiredStars = 2;
-                else if (cutnRun.morale > 85) aquiredStars = 3;
+                if (cutnRun.morale <= oneStarMorale) return;
+                else if (cutnRun.morale >= oneStarMorale && cutnRun.morale <= twoStarsMorale) acquiredStars = 1;
+                else if (cutnRun.morale > twoStarsMorale && cutnRun.morale <= threeStarsMorale) acquiredStars = 2;
+                else if (cutnRun.morale > threeStarsMorale) acquiredStars = 3;
                 else return;
             }
             else
@@ -332,14 +369,105 @@ public class GameOverSystem : MonoBehaviour
         else return;
     }
 
-    //Funzione che mostra il punteggio come contatore
-    private float ScoreCounter()
+    //Function that shows the score raising like a counter
+    private float RewardCounter()
     {
-        if (showedScore < player.playerScore)
+        if (showedReward < totalReward)
         {
-            showedScore += (counterSpeed * Time.unscaledDeltaTime) * player.playerScore;
-            if (showedScore >= player.playerScore) showedScore = player.playerScore;
+            showedReward += (counterSpeed * Time.unscaledDeltaTime) * totalReward;
+            if (showedReward >= totalReward) showedReward = totalReward;
         }
-        return showedScore;
+        return showedReward;
+    }
+
+    // Function that check whether the level was won or lost
+    private void CheckResult()
+    {
+        if (isMoraleBased)
+        {
+            if (cutnRun.morale <= 0) isSuccessful = false;
+            else isSuccessful = true;
+        }
+        else if (isTimeBased)
+        {
+            if (player.plantsKilled < requiredPlants) isSuccessful = false;
+        }
+        else if (isScoreBased)
+        {
+            if (player.playerScore < requiredScore) isSuccessful = false;
+            else isSuccessful = true;
+        }
+        else
+        {
+            Debug.LogError("The level type has not been assigned");
+            return;
+        }
+    }
+
+    //Function that checks the bonuses and add the appropriate rewards to the total
+    private void TotalReward()
+    {
+        totalReward += baseMoneyReward;
+        if (acquiredStars > 0)
+        {
+            int starReward = (acquiredStars - preAcquiredStars) * starBonus + preAcquiredStars * (starBonus / 10);
+            totalReward += starReward;
+            rewardStars.SetActive(true);
+            rewardStars.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = starReward.ToString();
+            for (int i = 0; i < acquiredStars; i++)
+            {
+                rewardStars.transform.GetChild(i).gameObject.SetActive(true);
+            }
+        }
+
+        if (newBest)
+        {
+            totalReward += bestScoreBonus;
+            rewardBest.SetActive(true);
+            rewardBest.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = bestScoreBonus.ToString();
+        }
+
+        if (firstTime)
+        {
+            totalReward += firstTimeBonus;
+            rewardFirstTime.SetActive(true);
+            rewardFirstTime.transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().text = firstTimeBonus.ToString();
+        }
+
+        if (sideQuestComplete && gameMaster.sideQuestsCompleted[bestIndex])
+        {
+            totalReward += sideQuestBonus / 10;
+            rewardSideQuest.SetActive(true);
+            rewardSideQuest.transform.GetComponentInChildren<TextMeshProUGUI>().text = (sideQuestBonus/10).ToString();
+        }
+        else if (sideQuestComplete)
+        {
+            totalReward += sideQuestBonus;
+            rewardSideQuest.SetActive(true);
+            rewardSideQuest.transform.GetComponentInChildren<TextMeshProUGUI>().text = sideQuestBonus.ToString();
+            gameMaster.sideQuestsCompleted[bestIndex] = true;
+        }
+    }
+
+    //Functions that checks whther was the first time the level was completed or not
+    private void CheckIfFirstTime()
+    {
+        if (isScoreBased)
+        {
+            if (gameMaster.bestScores[bestIndex] != 0) firstTime = false;
+        }
+        else if (isTimeBased)
+        {
+            if (gameMaster.bestTimes[bestIndex] != 0) firstTime = false;
+        }
+        else if (isMoraleBased)
+        {
+            if (gameMaster.bestMorales[bestIndex] != 0) firstTime = false;
+        }
+        else
+        {
+            Debug.LogError("The level type has not been assigned");
+            return;
+        }
     }
 }

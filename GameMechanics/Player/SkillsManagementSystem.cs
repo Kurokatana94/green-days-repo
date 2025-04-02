@@ -6,13 +6,11 @@ using UnityEditor;
 public class SkillsManagementSystem : MonoBehaviour
 {
     private GameMaster gameMaster;
-    private GameObject player;
     public GameObject[] skills;
 
     private void Awake()
     {
         gameMaster = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMaster>();
-        player = GameObject.FindGameObjectWithTag("Player");
     }
 
     private void Start()

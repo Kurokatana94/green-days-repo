@@ -47,9 +47,9 @@ public class CutnRunSystem : MonoBehaviour
 
     private void Update()
     {
-        timeBar.value = time / maxTime;
         if (gameOver.isMoraleBased)
         {
+            timeBar.value = time / maxTime;
             moraleBar.enabled = true;
             timeBar.enabled = true;
 

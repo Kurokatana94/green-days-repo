@@ -5,19 +5,20 @@ using UnityEngine;
 public class SkinUpdate : MonoBehaviour
 {
     private GameMaster gameMaster;
-    public Animator[] skins;
+    public AnimatorOverrideController[] skins;
     private Animator animator;
 
     private void Awake()
     {
         gameMaster = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMaster>();
+        animator = gameObject.GetComponent<Animator>();
     }
 
     private void Start()
     {
-        for (int i = 0; i < gameMaster.haveSkin.Length; i++)
+        for (int i = 1; i < gameMaster.haveSkin.Length; i++)
         {
-            if(gameMaster.skinActive[i] == true) animator.runtimeAnimatorController = skins[i].runtimeAnimatorController;
+            if (gameMaster.skinActive[i] == true) animator.runtimeAnimatorController = skins[i-1] as RuntimeAnimatorController;
         }
     }
 }

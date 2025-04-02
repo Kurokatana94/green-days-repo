@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using UnityEditorInternal.VersionControl;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -16,17 +11,17 @@ public class GameMaster : MonoBehaviour
 
     //Save Slot data variables
     public string name;
-    public DateTime date;
     public double timePlayed;
 
     // GameData variables to store
     public int totalPoints;
     public int totalMoney;
-    public int totalStars = 9;
+    public int totalStars = 20;
     public List<double> bestTimes = new List<double>();
     public List<int> bestScores = new List<int>();
     public List<int> bestMorales = new List<int>();
     public List<int> bestStars = new List<int>();
+    public List<bool> sideQuestsCompleted = new List<bool>();
 
     //StartData for checking availables save files
     public int lastSlot;
@@ -35,10 +30,13 @@ public class GameMaster : MonoBehaviour
     public int acquiredStars;
 
     //Items variables to check if acquired and activated
-    public bool[] haveSkin = new bool[4];
-    public bool[] skinActive = new bool[4];
-    public bool[] haveSkill = new bool[3];
-    public bool[] skillActive = new bool[3];
+    public bool[] haveSkin = new bool[6];
+    public bool[] skinActive = new bool[6];
+    public bool[] haveSkill = new bool[6];
+    public bool[] skillActive = new bool[6];
+
+    //Variables needed to keep track of the storyline and tutorial
+    public bool[] tutorial = new bool[10];
 
     private void Awake()
     {
@@ -77,9 +75,11 @@ public class GameMaster : MonoBehaviour
     private void ResetVariables()
     {
         // List of all GameData variables to reset
+        name = null;
         totalMoney = 0;
         totalPoints = 0;
         acquiredStars = 0;
+        timePlayed = 0;
 
         skinActive[0] = true;
         for (int i = 1; i < skinActive.Length; i++)
@@ -116,6 +116,16 @@ public class GameMaster : MonoBehaviour
         for (int i = 0; i < bestMorales.Count; i++)
         {
             bestMorales[i] = 0;
+        }
+
+        for (int i = 0; i < sideQuestsCompleted.Count; i++)
+        {
+            sideQuestsCompleted[i] = false;
+        }
+
+        for (int i = 0; i < tutorial.Length; i++)
+        {
+            tutorial[i] = false;
         }
     }
 }

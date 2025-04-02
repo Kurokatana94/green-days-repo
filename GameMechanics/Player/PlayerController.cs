@@ -7,8 +7,8 @@ public class PlayerController : MonoBehaviour
 {
     //General variables
     private Rigidbody2D rb;
-    private bool facingRight;
-    private bool facingLeft;
+    public bool facingRight;
+    public bool facingLeft;
     public float speed;
     private float realSpeed;
     private float moveInputHorizontal;
@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
     public bool canWalk = true;
     
     //Speed Up skill variables
-    public float speedMultiplier, speedBoost ;
+    public float speedMultiplier, speedBoost;
 
     //Scythe power up variables
     private SlashSystem slash;
